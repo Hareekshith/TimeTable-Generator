@@ -1,0 +1,9 @@
+# TimeTable Generator
+This is a curious idea to generate the timetable for an educational institution.
+This will generate timetable based on the number of faculty members, their subjects allotted, and the number of classes available. 
+Meanwhile here are the checks to be completed!
+- [ ] Figure out how data is gonna be collected on each faculty
+- [ ] Figure out how data is gonna be collected on each class individually
+- [ ] Figure out how the timetable is gonna get generated
+- [ ] Make sure that timetable is equally weighed on each faculty
+- [ ] Make sure suggestions are given promptly
