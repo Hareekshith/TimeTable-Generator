@@ -32,14 +32,40 @@ d5=[[None for _ in range(10)] for _ in range(5)]
 def generate(dic,dt):
     for i in range(5):
         for j in range(10):
-            a = random.choice(list(d.keys()))
-            if notoverlapcheck(d1,a,i*10+j):
-                d1[i][j] = a
-                d[a].append(i*10+j)
+            a = random.choice(list(dic.keys()))
+            if notoverlapcheck(dt,a,i*10+j):
+                dt[i][j] = a
+                dic[a].append(i*10+j)
+    return dt
+d1 = generate(d,d1)
+d2 = generate(d,d2)
+d3 = generate(d,d3)
+d4 = generate(d,d4)
+d5 = generate(d,d5)
 
+print("D1")
 for i in range (5):
     for j in range(10):
         print(d1[i][j],end=" ")
     print("\n")
-
+print("D2")
+for i in range (5):
+    for j in range(10):
+        print(d2[i][j],end=" ")
+    print("\n")
+print("D3")
+for i in range (5):
+    for j in range(10):
+        print(d3[i][j],end=" ")
+    print("\n")
+print("D4")
+for i in range (5):
+    for j in range(10):
+        print(d4[i][j],end=" ")
+    print("\n")
+print("D5")
+for i in range (5):
+    for j in range(10):
+        print(d5[i][j],end=" ")
+    print("\n")
 print(d)
