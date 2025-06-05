@@ -1,0 +1,14 @@
+body{
+  background-color: maroon;
+}
+.title {
+  text-align: center;
+  color: white;
+  font-family: "Montserrat",bold;
+}
+
+.desc{
+  text-align: justify;
+  color: orange;
+  font-family: "Montserrat";
+}

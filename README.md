@@ -14,3 +14,5 @@ Meanwhile here are the checks to be completed!
 - Created a function to check whether any period is overlapping with the other classes
 - Created a dictionary of all the subjects to store the allotted slots!
 - Created a function that does generate a timetable whether no periods are overlapped!
+- Used Flask framework to design access python codes!
+- Plan: Flask+React
