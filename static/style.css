@@ -12,3 +12,17 @@ body{
   color: orange;
   font-family: "Montserrat";
 }
+
+#intro{
+  display: grid;
+  grid-template: 
+  "1fr 1fr"
+  "1fr 1fr"
+  "1fr 1fr";
+  justify-items: center;
+}
+
+#intro .desc{
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
