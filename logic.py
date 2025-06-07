@@ -1,4 +1,5 @@
 import random
+import copy
 
 #It is just a complex sudoku, we have to track every subject and a class simultaeneously so that nothing overlaps over another!
 
@@ -14,11 +15,7 @@ def equalisecheck(dt):
     for i in range(5):
         for j in range(10):
             cul[ul.index(dt[i][j])] += 1
-    for i in range(len(cul)):
-        for j in range(i+1,len(cul)):
-            if abs(cul[i]-cul[j]) >= 1:
-                return False
-    return True
+    return (max(cul)-min(cul) <= 1)
 
 def notoverlapcheck(d,s,p):
     if (s in d):
@@ -46,19 +43,16 @@ d4=[[None for _ in range(10)] for _ in range(5)]
 d5=[[None for _ in range(10)] for _ in range(5)]
 
 def generate(dic,dt):
-    sdic = dic
+    sdic = copy.deepcopy(dic)
+    l = (50//len(d))*len(d)
     for i in range(5):
         for j in range(10):
             a = random.choice(list(dic.keys()))
-            if notoverlapcheck(dt,a,i*10+j):
-                dt[i][j] = a
-                dic[a].append(i*10+j)
-    if equalisecheck(dt):
-        return dt
-    else:
-        dic = sdic
-        dt = [[None for _ in range(10)] for _ in range(5)]
-        generate(dic,dt)
+
+            if (i*10+j < l):
+                if notoverlapcheck(dt,a,i*10+j):
+                    dt[i][j] = a
+                    dic[a].append(i*10+j)
 
 d1 = generate(d,d1)
 d2 = generate(d,d2)

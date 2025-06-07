@@ -9,7 +9,6 @@ Meanwhile here are the checks to be completed!
 - [x] Figure out how timetable is gonna be generated on a bulk
 - [ ] Make sure that timetable is equally weighed on each faculty
 - [ ] Make sure suggestions are given promptly
-
 ### How I am proceeding: 
 - Created a function to check whether any period is overlapping with the other classes
 - Created a dictionary of all the subjects to store the allotted slots!
