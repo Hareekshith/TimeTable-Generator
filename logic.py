@@ -26,63 +26,70 @@ def notoverlapcheck(d,s,p):
                 return 0
     return 1
 
-def getRanDl(d,l):
-    a = random.randint(0,l)
-    ij = 0
-    for i in d:
-        if ij==a:
-            return i
-        else:
-            ij+=1
 #let's divide each day into 10 periods, where Monday is p1....p10, Tuesday is p11....p20 and so on till Friday's p40....p50
 
-d1=[[None for _ in range(10)] for _ in range(5)]
+d1=[[0 for _ in range(10)] for _ in range(5)]
 d2=[[None for _ in range(10)] for _ in range(5)]
 d3=[[None for _ in range(10)] for _ in range(5)]
 d4=[[None for _ in range(10)] for _ in range(5)]
 d5=[[None for _ in range(10)] for _ in range(5)]
 
 def generate(dic,dt):
-    sdic = copy.deepcopy(dic)
+    sdic = dic.copy()
+    sc = {i:0 for i in dic}
+    sl = [i for i in dic]
     l = (50//len(d))*len(d)
     for i in range(5):
         for j in range(10):
-            a = random.choice(list(dic.keys()))
-
             if (i*10+j < l):
-                if notoverlapcheck(dt,a,i*10+j):
+                a = random.choice(list(sl))
+                while notoverlapcheck(dic,a,i*10+j) != 1:
+                    a = random.choice(list(sl))
+                if sc[a] != 3:
                     dt[i][j] = a
                     dic[a].append(i*10+j)
-
+                    sc[a] += 1
+                else:
+                    sl.remove(a)
+                    a = random.choice(list(sl))
+                    while notoverlapcheck(dic,a,i*10+j) != 1:
+                        a = random.choice(list(sl))
+                    if sc[a] != 3:
+                        dt[i][j] = a
+                        dic[a].append(i*10+j)
+                        sc[a] += 1
+            else:
+                a = random.choice(list(sc))
+                while notoverlapcheck(dic,a,i*10+j):
+                    a = random.choice(list(sc))
+                dt[i][j] = a
+                dic[a].append(i*10+j)
+    return dt
 d1 = generate(d,d1)
-d2 = generate(d,d2)
-d3 = generate(d,d3)
-d4 = generate(d,d4)
-d5 = generate(d,d5)
 
 print("D1")
 for i in range (5):
     for j in range(10):
         print(d1[i][j],end=" ")
     print("\n")
-print("D2")
-for i in range (5):
-    for j in range(10):
-        print(d2[i][j],end=" ")
-    print("\n")
-print("D3")
-for i in range (5):
-    for j in range(10):
-        print(d3[i][j],end=" ")
-    print("\n")
-print("D4")
-for i in range (5):
-    for j in range(10):
-        print(d4[i][j],end=" ")
-    print("\n")
-print("D5")
-for i in range (5):
-    for j in range(10):
-        print(d5[i][j],end=" ")
-    print("\n")
+#print("D2")
+#for i in range (5):
+#    for j in range(10):
+#        print(d2[i][j],end=" ")
+#    print("\n")
+#print("D3")
+#for i in range (5):
+#    for j in range(10):
+#        print(d3[i][j],end=" ")
+#    print("\n")
+#print("D4")
+#for i in range (5):
+#    for j in range(10):
+#        print(d4[i][j],end=" ")
+#    print("\n")
+#print("D5")
+#for i in range (5):
+#    for j in range(10):
+#        print(d5[i][j],end=" ")
+#    print("\n")
 print(d)
