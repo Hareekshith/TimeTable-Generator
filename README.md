@@ -7,7 +7,7 @@ Meanwhile here are the checks to be completed!
 - [ ] Figure out how data is gonna be collected on each class individually
 - [x] Figure out how the timetable is gonna get generated
 - [x] Figure out how timetable is gonna be generated on a bulk
-- [ ] Make sure that timetable is equally weighed on each faculty
+- [x] Make sure that timetable is equally weighed on each faculty
 - [ ] Make sure suggestions are given promptly
 ### How I am proceeding: 
 - Created a function to check whether any period is overlapping with the other classes
