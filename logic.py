@@ -1,95 +1,46 @@
 import random
 import copy
 
-#It is just a complex sudoku, we have to track every subject and a class simultaeneously so that nothing overlaps over another!
-
-d = {"English":[], "Hindi":[], "Tamil":[],"Sanskrit":[],"Maths":[],"Science":[],"Social1":[],"Social2":[],"ValueED":[],"Comp":[],"AI":[],"PET":[],"Phy":[],"Chem":[],"Acc":[],"BS":[]}
-
-def equalisecheck(dt):
-    ul = []
-    for i in range(5):
-        for j in range(10):
-            if dt[i][j] not in ul:
-                ul.append(dt[i][j])
-    cul = [0 for _ in range(len(ul))]
-    for i in range(5):
-        for j in range(10):
-            cul[ul.index(dt[i][j])] += 1
-    return (max(cul)-min(cul) <= 1)
-
 def notoverlapcheck(d,s,p):
     if (s in d):
         if (p in d[s]):
             return 0
         elif (p not in d[s]):
-            if (p+1 in d[s]) or (p-1 in d[s]):
+            if (p-1 in d[s]):
                 return 0
     return 1
 
-#let's divide each day into 10 periods, where Monday is p1....p10, Tuesday is p11....p20 and so on till Friday's p40....p50
+def generate(dic, dt, max_retries=50):
+    sub = list(dic.keys())
+    tp = 5 * 10
+    bs = tp // len(sub) 
+    es = tp % len(sub) 
+    
+    sc = {s: bs for s in sub}
+    for s in random.sample(sub, es):
+        sc[s] += 1
 
-d1=[[0 for _ in range(10)] for _ in range(5)]
-d2=[[None for _ in range(10)] for _ in range(5)]
-d3=[[None for _ in range(10)] for _ in range(5)]
-d4=[[None for _ in range(10)] for _ in range(5)]
-d5=[[None for _ in range(10)] for _ in range(5)]
-
-def generate(dic,dt):
-    sdic = dic.copy()
-    sc = {i:0 for i in dic}
-    sl = [i for i in dic]
-    l = (50//len(d))*len(d)
-    for i in range(5):
-        for j in range(10):
-            if (i*10+j < l):
-                a = random.choice(list(sl))
-                while notoverlapcheck(dic,a,i*10+j) != 1:
-                    a = random.choice(list(sl))
-                if sc[a] != 3:
-                    dt[i][j] = a
-                    dic[a].append(i*10+j)
-                    sc[a] += 1
-                else:
-                    sl.remove(a)
-                    a = random.choice(list(sl))
-                    while notoverlapcheck(dic,a,i*10+j) != 1:
-                        a = random.choice(list(sl))
-                    if sc[a] != 3:
-                        dt[i][j] = a
-                        dic[a].append(i*10+j)
-                        sc[a] += 1
-            else:
-                a = random.choice(list(sc))
-                while notoverlapcheck(dic,a,i*10+j):
-                    a = random.choice(list(sc))
-                dt[i][j] = a
-                dic[a].append(i*10+j)
+    for day in range(5):
+        for period in range(10):
+            gp = day * 10 + period
+            attempts = 0
+            success = False
+            while attempts < max_retries and not success:
+                candidates = [s for s in sub if sc[s] > 0]
+                if not candidates:
+                    break  
+                subject = random.choice(candidates)
+                if notoverlapcheck(dic, subject, gp):
+                    dt[day][period] = subject
+                    dic[subject].append(gp)
+                    sc[subject] -= 1
+                    success = True
+                attempts += 1
+            if not success:
+                for s in sub:
+                    if sc[s] > 0:
+                        dt[day][period] = s
+                        dic[s].append(gp)
+                        sc[s] -= 1
+                        break
     return dt
-d1 = generate(d,d1)
-
-print("D1")
-for i in range (5):
-    for j in range(10):
-        print(d1[i][j],end=" ")
-    print("\n")
-#print("D2")
-#for i in range (5):
-#    for j in range(10):
-#        print(d2[i][j],end=" ")
-#    print("\n")
-#print("D3")
-#for i in range (5):
-#    for j in range(10):
-#        print(d3[i][j],end=" ")
-#    print("\n")
-#print("D4")
-#for i in range (5):
-#    for j in range(10):
-#        print(d4[i][j],end=" ")
-#    print("\n")
-#print("D5")
-#for i in range (5):
-#    for j in range(10):
-#        print(d5[i][j],end=" ")
-#    print("\n")
-print(d)
