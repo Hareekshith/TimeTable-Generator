@@ -15,3 +15,4 @@ Meanwhile here are the checks to be completed!
 - Created a function that does generate a timetable whether no periods are overlapped!
 - Used Flask framework to design access python codes!
 - Plan: Flask+React
+- Created seperate frontend and backend modules!
