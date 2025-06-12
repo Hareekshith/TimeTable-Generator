@@ -1,5 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
-import Home from './pages/home'; // or './pages/home/Home' if using folders
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/home";
 
 function App() {
   return (
@@ -9,5 +9,4 @@ function App() {
   );
 }
 
-export default App;
-
+export default App
