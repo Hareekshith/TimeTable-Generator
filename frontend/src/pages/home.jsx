@@ -1,32 +1,45 @@
 import React from "react";
-import { Link } from "react-router-dom"; // If using React Router for navigation
-import "./Home.css"; // Optional: create for custom styles
+import { Link } from "react-router-dom";
+import "./Home.css";
 
 function Home() {
   return (
-    <div className="home-container">
-      <h1>School Timetable Generator</h1>
-      <p>
-        Effortlessly create balanced, conflict-free class timetables.<br />
-        Fast, simple, and customizable for any school!
-      </p>
-      <Link to="/details" className="cta-btn">
-        Get Started
-      </Link>
-      <div className="steps">
-        <h3>How it works:</h3>
-        <ol>
-          <li>Enter your subjects and schedule details</li>
-          <li>Click "Generate" to create your timetable</li>
-          <li>View, print, or download your schedule</li>
-        </ol>
+    <div className="hero-bg">
+      <div className="home-card">
+        <h1>School Timetable Generator</h1>
+        <p className="subtitle">
+          Effortlessly create balanced, conflict-free class timetables.<br />
+          Fast, simple, and customizable for any school!
+        </p>
+        <Link to="/details" className="cta-btn">
+          Get Started
+        </Link>
+        <div className="features">
+          <div>
+            <span role="img" aria-label="No Overlap">✅</span>
+            No subject overlaps
+          </div>
+          <div>
+            <span role="img" aria-label="Export">📄</span>
+            Export as PDF
+          </div>
+          <div>
+            <span role="img" aria-label="Custom">⚙️</span>
+            Fully customizable
+          </div>
+        </div>
+        <div className="how-works">
+          <h3>How it works:</h3>
+          <ol>
+            <li>Enter your subjects and schedule details</li>
+            <li>Click "Generate" to create your timetable</li>
+          </ol>
+        </div>
+        <footer>
+          &copy; 2025 Hareekshith —{" "}
+          <a href="https://github.com/hareekshith">GitHub</a>
+        </footer>
       </div>
-      <footer>
-        &copy; 2025 Your Name &mdash;{" "}
-        <a href="https://github.com/yourusername" style={{ color: "#2563eb" }}>
-          GitHub
-        </a>
-      </footer>
     </div>
   );
 }
