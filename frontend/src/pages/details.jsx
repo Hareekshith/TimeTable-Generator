@@ -10,8 +10,9 @@ function Details() {
     <input type="text" placeholder="Enter Class name " name="Class" />
 
     <label htmlfor="Class 2">Class 2</label>
-    <input type="text" placeholder="Enter Class name " name="CLass" />
+    <input type="text" placeholder="Enter Class name " name="Class" />
     </form>
+    <button>Submit</button>
       </div>
     </div>
   );

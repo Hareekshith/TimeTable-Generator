@@ -120,3 +120,35 @@ footer a {
   .hero-img { width: 48px; }
 }
 
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+form label{
+  color: var(--text-muted);
+}
+
+form input{
+  background-color: var(--primary-bg);
+  color: var(--text-main);
+  border-width: 0;
+  height: 30px;
+  text-align: center;
+}
+
+form input:enabled{
+  border-color: var(--accent);
+}
+
+button{
+  margin-top: 20px;
+  background: linear-gradient(290deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #fff;
+  border-color: var(--accent);
+  border-width: 0px;
+  height: 2rem;
+  border-radius: 18px;
+  width: 7em;
+}

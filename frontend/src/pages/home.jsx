@@ -20,10 +20,6 @@ function Home() {
             No subject overlaps
           </div>
           <div>
-            <span role="img" aria-label="Export">📄</span>
-            Export as PDF
-          </div>
-          <div>
             <span role="img" aria-label="Custom">⚙️</span>
             Fully customizable
           </div>
