@@ -19,6 +19,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+	width: 100vw;
 }
 
 .home-card {
@@ -143,6 +144,9 @@ form input:enabled{
 }
 
 button{
+	display: flex;
+	justify-content: center;
+	align-items: center;
   margin-top: 20px;
   background: linear-gradient(290deg, var(--accent) 0%, var(--accent2) 100%);
   color: #fff;
@@ -151,4 +155,5 @@ button{
   height: 2rem;
   border-radius: 18px;
   width: 7em;
+	justify-content: center;
 }
