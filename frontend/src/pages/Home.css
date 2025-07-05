@@ -17,9 +17,8 @@ body {
   min-height: 100vh;
   background: linear-gradient(135deg, #101624 0%, #1a2236 100%);
   display: grid;
-	grid-template-rows: 1fr 1fr;
-  align-items: center;
-  justify-content: center;
+	grid-template-columns: 1fr 1fr;
+	place-items: center;
 	width: 100vw;
 }
 
@@ -29,11 +28,14 @@ body {
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.32);
   padding: 48px 40px 32px 40px;
-  max-width: 500px;
+	width: 40vw;
   text-align: center;
   position: relative;
   animation: fadeIn 0.8s;
 }
+
+#id{
+	grid-column: 1 / span 2;}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(16px);}
@@ -158,15 +160,6 @@ button{
   border-radius: 18px;
   width: 7em;
 	justify-content: center;
-	grid-column: 1/ span 2;
+	grid-column: 1 / span 2;
 }
 
-#one{
-	grid-row-start: 1;
-	grid-row-end: 2;
-}
-
-#two{
-	grid-row-start: 2;
-	grid-row-end: 3;
-}

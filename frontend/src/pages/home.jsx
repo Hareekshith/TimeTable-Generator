@@ -5,7 +5,7 @@ import "./Home.css";
 function Home() {
   return (
     <div className="hero-bg">
-      <div className="home-card">
+      <div className="home-card" id="id">
         <h1>School Timetable Generator</h1>
         <p className="subtitle">
           Effortlessly create balanced, conflict-free class timetables.<br />
@@ -23,6 +23,10 @@ function Home() {
             <span role="img" aria-label="Custom">⚙️</span>
             Fully customizable
           </div>
+					<div>
+						<span role="img" aria-label="clean">🧹</span>
+						Neat and elegant
+					</div>
         </div>
         <div className="how-works">
           <h3>How it works:</h3>
