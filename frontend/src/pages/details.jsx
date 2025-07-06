@@ -34,24 +34,37 @@ function Details() {
   return(
     <div className="hero-bg">
 			<div className="home-card">
-				<form>
+				<form onSubmit={handleAddTeacher}>
 					<h1>For Adding teachers!</h1>
 					<label htmlFor="teacher name">Teacher name</label>
-    			<input type="text" placeholder="Enter name " name="Teacher" />
-					<label htmlFor="subjects">Enter subjects (seperated by commas)</label>
-					<input type="text" placeholder="Enter subjects " name="Subj" />
-					<button>Add</button>
+  				<input type="text" value={teacher.name} placeholder="Enter name" onChange={(e) => setTeacher({ ...teacher, name: e.target.value })} />
+  				<label htmlFor="subjects">Enter subjects (separated by commas)</label>
+  				<input type="text" value={teacher.subject} placeholder="Enter subjects" onChange={(e) => setTeacher({ ...teacher, subject: e.target.value })} />					
+					<button type="Submit">Add</button>
 				</form>
+				<h3>Teachers List</h3>
+				<ul>
+  				{teachli.map((t, i) => (
+    				<li key={i}>{t.name} - {t.subject}</li>
+					))}
+				</ul>
+
 			</div>
 			<div className="home-card">
-				<form>
+				<form onSubmit={handleAddClass}>
 					<h1>For adding classes</h1>
 					<label htmlFor="Class name">Class name</label>
-					<input type="text" placeholder="Enter class name " name="Class" />
+					<input type="text" placeholder="Enter class name " value={cla.name} onChange={(e) => setCla({...cla, name: e.target.value})} />
 					<label htmlFor="sub-teach">Enter subject with teacher name eg. Subject(Teacher name)</label>
-					<input type="text" placeholder="Enter your choices " name="classsubj" />
-					<button>Add</button>
+					<input type="text" placeholder="Enter your choices " value={cla.details} onChange={(e) => setCla({...cla, details: e.target.value})} />
+					<button type="Submit">Add</button>
 				</form>
+				<h3>Class List</h3>
+				<ul>
+  				{clali.map((t, i) => (
+    				<li key={i}>{t.name} - {t.subject}</li>
+					))}
+				</ul>
 			</div>
 			<button>Submit</button>
     </div>
