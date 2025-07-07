@@ -8,29 +8,28 @@ function Details() {
   });
   const [cla, setCla] = useState({
 		name: "",
-		details: "",
+		details: ""
 	});
 	const [clali, setClali] = useState([]);
 	const [teachli, setTeachli] = useState([]);
 	function handleAddTeacher(e) {
   	e.preventDefault();
-  	// Basic validation (optional)
   	if (!teacher.name.trim() || !teacher.subject.trim()) return;
-  	// Add current teacher to the list
   	setTeachli([...teachli, teacher]);
-  	// Reset input fields
   	setTeacher({ name: "", subject: "" });
 	}
 	function handleAddClass(e) {
   	e.preventDefault();
-  	// Basic validation (optional)
   	if (!cla.name.trim() || !cla.details.trim()) return;
-  	// Add current class to the list
   	setClali([...clali, cla]);
-  	// Reset input fields
   	setCla({ name: "", details: "" });
 	}
-
+	function handleDeleteTeacher(index) {
+  	setTeachli(teachli.filter((_, i) => i !== index));
+	}
+	function handleDeleteClass(index) {
+		setClali(clali.filter((_, i) => i !== index));
+	}
   return(
     <div className="hero-bg">
 			<div className="home-card">
@@ -45,10 +44,11 @@ function Details() {
 				<h3>Teachers List</h3>
 				<ul>
   				{teachli.map((t, i) => (
-    				<li key={i}>{t.name} - {t.subject}</li>
+    				<li key={i}> <div className="ent"> <h4 className="enttitl">{t.name}</h4> 
+							<p className="entsubj">{t.subject}</p> 
+						<button onClick={() => handleDeleteTeacher(i)}>Delete</button></div> </li>
 					))}
 				</ul>
-
 			</div>
 			<div className="home-card">
 				<form onSubmit={handleAddClass}>
@@ -62,7 +62,9 @@ function Details() {
 				<h3>Class List</h3>
 				<ul>
   				{clali.map((t, i) => (
-    				<li key={i}>{t.name} - {t.subject}</li>
+    				<li key={i}> <div className="ent"> <h4 className="enttitl">{t.name}</h4> 
+							<p className="entsubj">{t.details}</p> 
+						<button onClick={() => handleDeleteClass(i)}>Delete</button></div> </li>
 					))}
 				</ul>
 			</div>
