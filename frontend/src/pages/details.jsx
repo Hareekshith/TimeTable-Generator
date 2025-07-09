@@ -30,6 +30,49 @@ function Details() {
 	function handleDeleteClass(index) {
 		setClali(clali.filter((_, i) => i !== index));
 	}
+//	const allData={
+//		teachers: teachli,
+//		classes: clali
+//	}
+//	const jsonString = JSON.stringify(allData);
+//	localStorage.setItem("timetableData", JSON.stringify(allData));
+//	const saved = localStorage.getItem("timetableData");
+//	if (saved) {
+//  	const parsed = JSON.parse(saved);
+//  	setTeachli(parsed.teachers || []);
+//  	setClali(parsed.classes || []);
+//	}
+	function handleSubmit(e) {
+  e.preventDefault(); // Prevents page reload
+
+  // Combine all your data
+  const allData = {
+    teachers: teachli,
+    classes: clali
+  };
+
+  // Example: Send to backend
+  fetch('/api/submit-timetable', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(allData)
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle response from backend (show success, etc.)
+      alert('Timetable submitted successfully!');
+      // Optionally: clear lists or redirect
+    })
+    .catch(error => {
+      // Handle errors
+      alert('Error submitting timetable!');
+      console.error(error);
+    });
+
+  // Optionally: Save to localStorage for persistence
+  // localStorage.setItem("timetableData", JSON.stringify(allData));
+}
+
   return(
     <div className="hero-bg">
 			<div className="home-card">
@@ -68,7 +111,7 @@ function Details() {
 					))}
 				</ul>
 			</div>
-			<button>Submit</button>
+			<button onClick={handleSubmit}>Submit</button>
     </div>
   );
 }
