@@ -1,5 +1,6 @@
 import { React , useState } from "react";
 import "./Home.css";
+import axios from "axios";
 
 function Details() {
   const [teacher, setTeacher] = useState({
@@ -31,34 +32,21 @@ function Details() {
 		setClali(clali.filter((_, i) => i !== index));
 	}
 	function handleSubmit(e) {
-  e.preventDefault(); // Prevents page reload
-
-  // Combine all your data
-  const allData = {
-    teachers: teachli,
-    classes: clali
-  };
-
-  // Example: Send to backend
-  fetch('/api/generate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ dic: allData }) // Wrap allData in a "dic" key!
-  })
-
-    .then(response => response.json())
-    .then(data => {
-      // Handle response from backend (show success, etc.)
-      alert('Timetable submitted successfully!');
-      // Optionally: clear lists or redirect
+    e.preventDefault(); // Prevents page reload
+    const allData = {
+      "teachers": teachli,
+      "classes": clali
+    };// Combine all your data
+    axios.post('http://localhost:5000/api/generate', { "dic": allData })
+    .then(response => { // Handle the backend response
+      console.log('Backend response:', response.data);
+      alert("Successfully submitted!");
     })
-    .catch(error => {
-      // Handle errors
-      alert('Error submitting timetable!');
+    .catch(error => {// Handle errors
+      alert('Error submitting data: ' + error.message);
       console.error(error);
     });
-}
-
+  } 
   return(
     <div className="hero-bg">
 			<div className="home-card">
