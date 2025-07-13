@@ -7,11 +7,30 @@ from API.logic import generate
 app = Flask(__name__)
 cors = CORS(app,origins="*")  # Enable CORS for all routes
 
+def verify(d, s):
+    if "(" not in s or ")" not in s:
+        return 0
+    rd = d['teachers']
+    rs = s.split("(")
+    subject = rs[0].strip()
+    teacher = rs[1].rstrip(")").strip()
+    for i in rd:
+        if i['name'] == teacher:
+            subjects = [subj.strip() for subj in i['subject'].split(",")]
+            if subject in subjects:
+                return 1
+    return 0
+
 @app.route('/api/generate', methods=['POST'])
 def generate_timetable():
-    data = request.get_json(force=True)
-    print(f"Received data: {data}")
-    return jsonify({"status": "received", "data": data}), 200
+    data = request.get_json()
+    dic = data.get('dic')
+    if not dic:
+        return jsonify({"error": "Missing 'dic' in request"}), 400
+    print()
+    #timetable = generate(dic)
+    print(dic)
+    return jsonify({"timetable": "started process"})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

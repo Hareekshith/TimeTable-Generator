@@ -101,7 +101,7 @@ function Details() {
           </>
         )}			
       </div>
-			<button onClick={handleSubmit}>Submit</button>
+			<button id="submit" onClick={handleSubmit}>Submit</button>
     </div>
   );
 }
