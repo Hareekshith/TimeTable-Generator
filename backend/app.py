@@ -27,10 +27,13 @@ def generate_timetable():
     dic = data.get('dic')
     if not dic:
         return jsonify({"error": "Missing 'dic' in request"}), 400
-    print()
-    #timetable = generate(dic)
+    for i in dic['classes']:
+        l = [k.strip() for k in i['details'].split(',')]
+        for j in l:
+            if not verify(dic,j):
+                return jsonify({"error": "Kindly check with your data entered!"}), 400
     print(dic)
-    return jsonify({"timetable": "started process"})
+    return jsonify({"timetable": "started process"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

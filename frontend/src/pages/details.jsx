@@ -43,7 +43,7 @@ function Details() {
       alert("Successfully submitted!");
     })
     .catch(error => {// Handle errors
-      alert('Error submitting data: ' + error.message);
+      alert('Error submitting data: ' + response.data['Object']);
       console.error(error);
     });
   } 
@@ -101,7 +101,7 @@ function Details() {
           </>
         )}			
       </div>
-			<button id="submit" onClick={handleSubmit}>Submit</button>
+			<button id="submit" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0}>Submit</button>
     </div>
   );
 }
