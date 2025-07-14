@@ -160,6 +160,8 @@ button{
   border-radius: 18px;
   width: 7em;
 	grid-column: 1 / span 2;
+  transition: cubic-bezier(.4,0,.2,1) 0.2s; 
+  filter: brightness(50%); 
 }
 ul{
 	list-style: none;
@@ -192,4 +194,12 @@ li button{
 }
 #submit{
   margin-bottom: 20px;
+}
+button:hover{
+ transform: scale(1.1);
+  filter: blur(0px) brightness(120%); 
+}
+#submit:disabled{
+  background-color: #cccccc;
+  cursor: not-allowed;
 }

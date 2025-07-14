@@ -43,8 +43,12 @@ function Details() {
       alert("Successfully submitted!");
     })
     .catch(error => {// Handle errors
-      alert('Error submitting data: ' + response.data['Object']);
-      console.error(error);
+      if (error.response && error.response.data && error.response.data.error) {
+        console.error('Backend error:', error.response.data.error);
+        alert('Error: ' + error.response.data.error); // Optional: show pop-up
+      } else {
+        console.error('Unknown error:', error);
+      }
     });
   } 
   return(
