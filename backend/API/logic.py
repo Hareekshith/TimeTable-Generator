@@ -1,5 +1,7 @@
 import random
 import copy
+import re
+
 
 def notoverlapcheck(d,s,p):
     if (s in d):
@@ -44,3 +46,14 @@ def generate(dic, dt, max_retries=50):
                         sc[s] -= 1
                         break
     return dt
+
+def generate_js(dic):
+    tch = dict()
+    for i in dic['teachers']:
+        tch[i['name']] = []
+        
+    for i in dic['classes']:
+        tchsub = dict()
+        for j in [k.strip() for k in i['details'].split(",")]:
+            tchsub[j[:j.index("[")]] = j[j.index("[")+1: j.index("]")]
+
