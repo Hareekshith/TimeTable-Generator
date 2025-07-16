@@ -1,7 +1,7 @@
 import random
 import copy
-import re
 
+d = {'teachers': [{'name': 'Monica', 'subject': 'Math, Bio, Jargan'}, {'name': 'Kanthi', 'subject': 'Java, OOPs, Python'}, {'name': 'Nirma', 'subject': 'DSD, MPMC, EEE'}, {'name': 'Vijay', 'subject': 'Calculus, DET, DMGT'}, {'name': 'Ethn', 'subject': 'Aptitude'}], 'classes': [{'name': 'Class-1', 'details': 'Math(Monica), Java(Kanthi), DSD(Nirma), Calculus(Vijay)'}, {'name': 'Class-3', 'details': 'Python(Kanthi), EEE(Nirma), DMGT(Vijay), Aptitude(Ethn)'}, {'name': 'Class-2', 'details': 'Bio(Monica), OOPs(Kanthi), MPMC(Nirma), DET(Vijay), Aptitude(Ethn)'}]}
 
 def notoverlapcheck(d,s,p):
     if (s in d):
@@ -12,11 +12,12 @@ def notoverlapcheck(d,s,p):
                 return 0
     return 1
 
-def generate(dic, dt, max_retries=50):
+def generate(dic, max_retries=50):
     sub = list(dic.keys())
     tp = 5 * 10
     bs = tp // len(sub) 
     es = tp % len(sub) 
+    dt = [[_ for _ in range(10)] for i in range(5)]
     
     sc = {s: bs for s in sub}
     for s in random.sample(sub, es):
@@ -49,11 +50,18 @@ def generate(dic, dt, max_retries=50):
 
 def generate_js(dic):
     tch = dict()
+    ttd = dict()
     for i in dic['teachers']:
         tch[i['name']] = []
         
     for i in dic['classes']:
         tchsub = dict()
         for j in [k.strip() for k in i['details'].split(",")]:
-            tchsub[j[:j.index("[")]] = j[j.index("[")+1: j.index("]")]
+            tchsub[j[:j.index("(")]] = j[j.index("(")+1: j.index(")")]
+        sub = {_: [] for _ in tchsub}
+        tt = generate(sub)
+        ttd[i['name']] = tt
+    return {"classes":ttd, "teachers":tch}
 
+if __name__ == "__main__":
+    print(generate_js(d))
