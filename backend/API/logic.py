@@ -1,67 +1,70 @@
 import random
-import copy
+import math
+import json
 
-d = {'teachers': [{'name': 'Monica', 'subject': 'Math, Bio, Jargan'}, {'name': 'Kanthi', 'subject': 'Java, OOPs, Python'}, {'name': 'Nirma', 'subject': 'DSD, MPMC, EEE'}, {'name': 'Vijay', 'subject': 'Calculus, DET, DMGT'}, {'name': 'Ethn', 'subject': 'Aptitude'}], 'classes': [{'name': 'Class-1', 'details': 'Math(Monica), Java(Kanthi), DSD(Nirma), Calculus(Vijay)'}, {'name': 'Class-3', 'details': 'Python(Kanthi), EEE(Nirma), DMGT(Vijay), Aptitude(Ethn)'}, {'name': 'Class-2', 'details': 'Bio(Monica), OOPs(Kanthi), MPMC(Nirma), DET(Vijay), Aptitude(Ethn)'}]}
+def can_assign(cnts, t, d, max_per_day):
+    return cnts[t][d] < max_per_day
 
-def notoverlapcheck(d,s,p):
-    if (s in d):
-        if (p in d[s]):
-            return 0
-        elif (p not in d[s]):
-            if (p-1 in d[s]):
-                return 0
-    return 1
+def can_place(tt, d, p, sub):
+    row = tt[d]
+    # Check left
+    if p >= 2 and row[p-1] == sub and row[p-2] == sub:
+        return False
+    if p >= 1 and p < len(row)-1 and row[p-1] == sub and row[p+1] == sub:
+        return False
+    if p < len(row)-2 and row[p+1] == sub and row[p+2] == sub:
+        return False
+    return True
 
-def generate(dic, max_retries=50):
-    sub = list(dic.keys())
-    tp = 5 * 10
-    bs = tp // len(sub) 
-    es = tp % len(sub) 
-    dt = [[_ for _ in range(10)] for i in range(5)]
-    
-    sc = {s: bs for s in sub}
-    for s in random.sample(sub, es):
-        sc[s] += 1
+def gen_schedule(data, per_day=10):
+    ts = [t['name'] for t in data['teachers']]
+    t_tt = {t: [[None for _ in range(per_day)] for _ in range(5)] for t in ts}
+    t_cnt = {t: [0]*5 for t in ts}
+    c_tt = {}
+    max_p = math.floor(0.8 * per_day)
 
-    for day in range(5):
-        for period in range(10):
-            gp = day * 10 + period
-            attempts = 0
-            success = False
-            while attempts < max_retries and not success:
-                candidates = [s for s in sub if sc[s] > 0]
-                if not candidates:
-                    break  
-                subject = random.choice(candidates)
-                if notoverlapcheck(dic, subject, gp):
-                    dt[day][period] = subject
-                    dic[subject].append(gp)
-                    sc[subject] -= 1
-                    success = True
-                attempts += 1
-            if not success:
-                for s in sub:
-                    if sc[s] > 0:
-                        dt[day][period] = s
-                        dic[s].append(gp)
+    for c in data['classes']:
+        cname = c['name']
+        det = c['details']
+        sub_t = {}
+        parts = [p.strip() for p in det.split(',')]
+        for p in parts:
+            i1, i2 = p.index('('), p.index(')')
+            s = p[:i1].strip()
+            t = p[i1+1:i2].strip()
+            sub_t[s] = t
+
+        subs = list(sub_t.keys())
+        ttl = 5 * per_day
+        sc = {}
+        base = ttl // len(subs)
+        ext = ttl % len(subs)
+        for i, s in enumerate(subs):
+            sc[s] = base + (1 if i < ext else 0)
+
+        tt = [["" for _ in range(per_day)] for _ in range(5)]
+
+        for d in range(5):
+            periods = list(range(per_day))
+            random.shuffle(periods)
+            for p in periods:
+                random.shuffle(subs)  # Try different order every time
+                for s in subs:
+                    t = sub_t[s]
+                    # Make sure:
+                    # - subject still has slots to assign
+                    # - teacher can take that period
+                    # - same subject doesn't appear >2 times in a row
+                    if sc[s] > 0 and can_assign(t_cnt, t, d, max_p) and can_place(tt, d, p, s):
+                        tt[d][p] = s
+                        t_tt[t][d][p] = cname
+                        t_cnt[t][d] += 1
                         sc[s] -= 1
                         break
-    return dt
 
-def generate_js(dic):
-    tch = dict()
-    ttd = dict()
-    for i in dic['teachers']:
-        tch[i['name']] = []
-        
-    for i in dic['classes']:
-        tchsub = dict()
-        for j in [k.strip() for k in i['details'].split(",")]:
-            tchsub[j[:j.index("(")]] = j[j.index("(")+1: j.index(")")]
-        sub = {_: [] for _ in tchsub}
-        tt = generate(sub)
-        ttd[i['name']] = tt
-    return {"classes":ttd, "teachers":tch}
+        c_tt[cname] = tt
 
-if __name__ == "__main__":
-    print(generate_js(d))
+    return {
+        "classes": c_tt,
+        "teachers": t_tt
+    }

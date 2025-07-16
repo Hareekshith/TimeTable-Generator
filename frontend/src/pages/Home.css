@@ -172,6 +172,7 @@ ul{
 	margin: 0;
 }
 .ent{
+  padding: 10px;
 	background: var(--primary-bg);
 	display: grid;
 	grid-template-columns: 7fr 3fr;

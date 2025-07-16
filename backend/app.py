@@ -2,7 +2,7 @@
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from API.logic import generate
+from API.logic import gen_schedule
 
 app = Flask(__name__)
 cors = CORS(app,origins="*")  # Enable CORS for all routes
@@ -32,7 +32,7 @@ def generate_timetable():
         for j in l:
             if not verify(dic,j):
                 return jsonify({"error": "Kindly check with your data entered!"}), 400
-    print(dic)
+    print(gen_schedule(dic))
     return jsonify({"timetable": "started process"}), 200
 
 if __name__ == '__main__':
