@@ -51,10 +51,6 @@ def gen_schedule(data, per_day=10):
                 random.shuffle(subs)  # Try different order every time
                 for s in subs:
                     t = sub_t[s]
-                    # Make sure:
-                    # - subject still has slots to assign
-                    # - teacher can take that period
-                    # - same subject doesn't appear >2 times in a row
                     if sc[s] > 0 and can_assign(t_cnt, t, d, max_p) and can_place(tt, d, p, s):
                         tt[d][p] = s
                         t_tt[t][d][p] = cname

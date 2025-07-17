@@ -1,4 +1,5 @@
 import { React , useState } from "react";
+import { Link } from "react-router-dom";
 import "./Home.css";
 import axios from "axios";
 
@@ -13,23 +14,28 @@ function Details() {
 	});
 	const [clali, setClali] = useState([]);
 	const [teachli, setTeachli] = useState([]);
+  const [submit, setSubmit] = useState(false);
 	function handleAddTeacher(e) {
   	e.preventDefault();
   	if (!teacher.name.trim() || !teacher.subject.trim()) return;
   	setTeachli([...teachli, teacher]);
   	setTeacher({ name: "", subject: "" });
+    setSubmit(false);
 	}
 	function handleAddClass(e) {
   	e.preventDefault();
   	if (!cla.name.trim() || !cla.details.trim()) return;
   	setClali([...clali, cla]);
   	setCla({ name: "", details: "" });
+    setSubmit(false);
 	}
 	function handleDeleteTeacher(index) {
   	setTeachli(teachli.filter((_, i) => i !== index));
+    setSubmit(false);
 	}
 	function handleDeleteClass(index) {
 		setClali(clali.filter((_, i) => i !== index));
+    setSubmit(false);
 	}
 	function handleSubmit(e) {
     e.preventDefault(); // Prevents page reload
@@ -41,8 +47,10 @@ function Details() {
     .then(response => { // Handle the backend response
       console.log('Backend response:', response.data);
       alert("Successfully submitted!");
+      setSubmit(true);
     })
     .catch(error => {// Handle errors
+      setSubmit(false);
       if (error.response && error.response.data && error.response.data.error) {
         console.error('Backend error:', error.response.data.error);
         alert('Error: ' + error.response.data.error); // Optional: show pop-up
@@ -106,6 +114,7 @@ function Details() {
         )}			
       </div>
 			<button id="submit" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0}>Submit</button>
+      {submit && <Link to='/timetable' className="cta-btn">View TimeTable</Link>}
     </div>
   );
 }

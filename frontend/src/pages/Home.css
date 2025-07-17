@@ -64,21 +64,21 @@ h1 {
 
 .cta-btn {
   display: inline-block;
+  grid-column: 1/ span 2;
   background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
   color: #fff;
   padding: 14px 38px;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
   font-size: 1.1em;
   font-weight: 700;
   margin-bottom: 24px;
   text-decoration: none;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 12px #2563eb22;
+  transition: cubic-bezier(.4,1,.2,1) 0.3s;
 }
 .cta-btn:hover {
-  background: linear-gradient(90deg,#1e40af 0%,#3b82f6 100%);
-  box-shadow: 0 4px 18px #2563eb33;
+  transform: scale(1.1);
+  color: #ccf;
 }
 
 .features {

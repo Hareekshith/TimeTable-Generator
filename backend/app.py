@@ -32,8 +32,9 @@ def generate_timetable():
         for j in l:
             if not verify(dic,j):
                 return jsonify({"error": "Kindly check with your data entered!"}), 400
-    print(gen_schedule(dic))
-    return jsonify({"timetable": "started process"}), 200
+    r = gen_schedule(dic)
+    print(r)
+    return jsonify(r), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
