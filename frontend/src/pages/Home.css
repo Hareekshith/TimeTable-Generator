@@ -204,3 +204,27 @@ button:hover{
   background-color: #cccccc;
   cursor: not-allowed;
 }
+.time-card {
+  margin: 2rem auto;
+  max-width: 1000px;
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.time-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.time-card th, .time-card td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.time-card th {
+  background-color: var(--primary-bg);
+}
+

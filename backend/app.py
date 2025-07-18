@@ -6,7 +6,7 @@ from API.logic import gen_schedule
 
 app = Flask(__name__)
 cors = CORS(app,origins="*")  # Enable CORS for all routes
-
+r = None
 def verify(d, s):
     if "(" not in s or ")" not in s:
         return 0
@@ -32,9 +32,18 @@ def generate_timetable():
         for j in l:
             if not verify(dic,j):
                 return jsonify({"error": "Kindly check with your data entered!"}), 400
-    r = gen_schedule(dic)
-    print(r)
-    return jsonify(r), 200
+    tt = gen_schedule(dic)
+    global r
+    r = tt
+    print(tt)
+    return jsonify(tt), 200
+
+@app.route('/api/timetable', methods=['GET'])
+def get_timetable():
+    # Serve the most recently generated timetable
+    if not r:
+        return jsonify({"error": "No timetable generated yet."}), 404
+    return jsonify(r)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

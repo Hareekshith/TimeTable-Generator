@@ -1,62 +1,89 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./Home.css"; // or create Timetable.css for better separation
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
+// Reusable timetable table renderer
 function TimetableTable({ label, data, periodCount }) {
   return (
-    <div style={{ marginBottom: "2em" }}>
+    <div className="time-card">
       <h3>{label}</h3>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+      <table>
         <thead>
           <tr>
-            <th style={{ background: "#f0f0f0" }}></th>
-            {[...Array(periodCount).keys()].map((p) => (
-              <th key={p} style={{ background: "#f0f0f0" }}>Period {p + 1}</th>
+            <th>Day</th>
+            {[...Array(periodCount)].map((_, i) => (
+              <th key={i}>P{i + 1}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.map((dayRow, dIdx) => (
-            <tr key={dIdx}>
-              <th style={{ background: "#f0f0f0", fontWeight: 400, textAlign: "left" }}>
-                {days[dIdx]}
-              </th>
-              {dayRow.map((item, pIdx) => (
-                <td key={pIdx} style={{ border: "1px solid #ccc", textAlign: "center", padding: "4px 8px" }}>
-                  {item || ""}
-                </td>
+          {data.map((day, dIndex) => (
+            <tr key={dIndex}>
+              <td>{days[dIndex]}</td>
+              {day.map((entry, pIndex) => (
+                <td key={pIndex}>{entry || "-"}</td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-export default function TimetablePage({ timetableData }) {
-  const periodsPerDay =
-    timetableData.classes &&
-    timetableData.classes[Object.keys(timetableData.classes)[0]][0].length;
+export default function TimetablePage() {
+  const [data, setData] = useState(null);     // timetable data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/timetable")
+      .then(res => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to fetch timetable:", err);
+        setError("Unable to load timetable.");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div style={{ textAlign: "center", padding: "2rem" }}>Loading...</div>;
+  }
+
+  if (error) {
+    return <div style={{ color: "red", textAlign: "center", padding: "2rem" }}>{error}</div>;
+  }
+
+  if (!data || !data.classes || !data.teachers) {
+    return <div style={{ textAlign: "center", padding: "2rem" }}>No timetable available.</div>;
+  }
+
+  const periodCount = data.classes[Object.keys(data.classes)[0]][0].length;
 
   return (
-    <div>
-      <h2>Class Timetables</h2>
-      {Object.entries(timetableData.classes).map(([className, table]) => (
+    <div className="hero-bg">
+      <h2 style={{ textAlign: "center" }}>Class Timetables</h2>
+      {Object.entries(data.classes).map(([className, table]) => (
         <TimetableTable
           key={className}
           label={className}
           data={table}
-          periodCount={periodsPerDay}
+          periodCount={periodCount}
         />
       ))}
-      <h2>Teacher Timetables</h2>
-      {Object.entries(timetableData.teachers).map(([teacher, table]) => (
+
+      <h2 style={{ textAlign: "center" }}>Teacher Timetables</h2>
+      {Object.entries(data.teachers).map(([teacherName, table]) => (
         <TimetableTable
-          key={teacher}
-          label={teacher}
+          key={teacherName}
+          label={teacherName}
           data={table}
-          periodCount={periodsPerDay}
+          periodCount={periodCount}
         />
       ))}
     </div>
