@@ -20,6 +20,7 @@ body {
 	grid-template-columns: 1fr 1fr;
 	place-items: center;
 	width: 100vw;
+  text-align: center;
 }
 
 .home-card {
@@ -48,7 +49,7 @@ body {
   margin-bottom: 18px;
 }
 
-h1 {
+h1,h2 {
   font-size: 2.4em;
   font-weight: 800;
   margin-bottom: 0.4em;
@@ -211,6 +212,8 @@ button:hover{
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+  grid-column: 1/ span 2;
 }
 
 .time-card table {

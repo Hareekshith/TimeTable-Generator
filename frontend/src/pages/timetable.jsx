@@ -46,7 +46,7 @@ export default function TimetablePage() {
       })
       .catch(err => {
         console.error("Failed to fetch timetable:", err);
-        setError("Unable to load timetable.");
+        alert("Unable to load timetable.");
         setLoading(false);
       });
   }, []);
@@ -67,15 +67,15 @@ export default function TimetablePage() {
 
   return (
     <div className="hero-bg">
-      <h2 style={{ textAlign: "center" }}>Class Timetables</h2>
+      <div style={{display: 'flex', justifyContent: 'center'}}><h2 style={{ textAlign: "center" }}>Class Timetables</h2>
       {Object.entries(data.classes).map(([className, table]) => (
         <TimetableTable
           key={className}
           label={className}
           data={table}
           periodCount={periodCount}
-        />
-      ))}
+        /> 
+        ))}
 
       <h2 style={{ textAlign: "center" }}>Teacher Timetables</h2>
       {Object.entries(data.teachers).map(([teacherName, table]) => (
@@ -89,4 +89,3 @@ export default function TimetablePage() {
     </div>
   );
 }
-
