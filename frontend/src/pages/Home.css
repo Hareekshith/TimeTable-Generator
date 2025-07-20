@@ -11,6 +11,8 @@
 
 body {
   background: var(--primary-bg);
+  border: 0;
+  padding: 0;
 }
 
 .hero-bg {
@@ -207,13 +209,12 @@ button:hover{
 }
 .time-card {
   margin: 2rem auto;
-  max-width: 1000px;
+  width: 45vw;
   background: var(--card-bg);
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   text-align: center;
-  grid-column: 1/ span 2;
 }
 
 .time-card table {

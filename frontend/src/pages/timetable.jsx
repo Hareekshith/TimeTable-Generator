@@ -67,7 +67,7 @@ export default function TimetablePage() {
 
   return (
     <div className="hero-bg">
-      <div style={{display: 'flex', justifyContent: 'center'}}><h2 style={{ textAlign: "center" }}>Class Timetables</h2>
+      <h2 style={{ gridColumn: "1/ span 2" }}>Class Timetables</h2>
       {Object.entries(data.classes).map(([className, table]) => (
         <TimetableTable
           key={className}
@@ -76,8 +76,7 @@ export default function TimetablePage() {
           periodCount={periodCount}
         /> 
         ))}
-
-      <h2 style={{ textAlign: "center" }}>Teacher Timetables</h2>
+      <h2 style={{ gridColumn: "1/ span 2"}}>Teacher Timetables</h2>
       {Object.entries(data.teachers).map(([teacherName, table]) => (
         <TimetableTable
           key={teacherName}
