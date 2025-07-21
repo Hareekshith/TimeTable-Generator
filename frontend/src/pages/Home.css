@@ -209,7 +209,8 @@ button:hover{
 }
 .time-card {
   margin: 2rem auto;
-  width: 45vw;
+  width: 47vw;
+  max-width: 47vw;
   background: var(--card-bg);
   padding: 1rem;
   border-radius: 8px;
@@ -226,6 +227,9 @@ button:hover{
   border: 1px solid #ccc;
   padding: 6px 8px;
   text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .time-card th {

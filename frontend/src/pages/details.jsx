@@ -1,9 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
 import axios from "axios";
 
+function useAutoClearLocalStorage(timeout = 180000) { // 3 minutes in ms
+  const timer = useRef();
+
+  useEffect(() => {
+    const resetTimer = () => {
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = setTimeout(() => {
+        // Clear only your app's keys for safety
+        localStorage.removeItem("teachli");
+        localStorage.removeItem("clali");
+        localStorage.removeItem("submitted");
+        // Optionally reset state, show modal, or reload
+        window.location.reload();
+      }, timeout);
+    };
+
+    // User actions to listen for:
+    const activityEvents = ["mousemove", "keydown", "click", "scroll"];
+    activityEvents.forEach(event =>
+      window.addEventListener(event, resetTimer)
+    );
+    resetTimer(); // Start timer on mount
+
+    return () => {
+      activityEvents.forEach(event =>
+        window.removeEventListener(event, resetTimer)
+      );
+      clearTimeout(timer.current);
+    };
+  }, [timeout]);
+}
+
 function Details() {
+  useAutoClearLocalStorage(180000);
+  const [noper, setNoper] = useState(0);
   const [teacher, setTeacher] = useState({ name: "", subject: "" });
   const [teachli, setTeachli] = useState(() => {
     const saved = localStorage.getItem("teachli");
@@ -31,6 +65,10 @@ function Details() {
   useEffect(() => {
     localStorage.setItem("submitted", JSON.stringify(submitted));
   }, [submitted]);
+
+  function handleAddSlot(e) {
+    e.preventDefault();
+  }
 
   function handleAddTeacher(e) {
     e.preventDefault();
@@ -100,6 +138,19 @@ function Details() {
 
   return (
     <div className="hero-bg">
+      <div className="home-card" style={{gridColumn: "1/span 2"}}>
+        <form>
+          <label htmlFor="no-periods">Number of slots per day</label>
+          <input
+            type="text"
+            value={noper}
+            placeholder="No. of slots "
+            onChange={e =>
+              setNoper(parseInt(e.target.value || 0))
+            }
+          />
+        </form>
+      </div>
       <div className="home-card">
         <form onSubmit={handleAddTeacher}>
           <h1>For Adding Teachers</h1>
