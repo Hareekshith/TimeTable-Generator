@@ -2,20 +2,27 @@
 ![screenshots](https://github.com/hareekshith/Timetable-generator/blob/main/poster_final.png)
 This is a curious idea to generate the timetable for an educational institution.
 This will generate timetable based on the number of faculty members, their subjects allotted, and the number of classes available. 
-Meanwhile here are the checks to be completed!
-### Tasks
-- [x] Figure out how data is gonna be collected on each faculty
-- [x] Figure out how data is gonna be collected on each class individually
-- [x] Figure out how the timetable is gonna get generated
-- [x] Figure out how timetable is gonna be generated on a bulk
-- [x] Make sure that timetable is equally weighed on each faculty
-- [x] Figure out how the timetable is gonna get displayed!
-### How I am proceeding: 
-- Created a function to check whether any period is overlapping with the other classes
-- Created a dictionary of all the subjects to store the allotted slots!
-- Created a function that does generate a timetable whether no periods are overlapped!
-- Used Flask framework to design access python codes!
-- Plan: Flask+React(VITE)
-- Created seperate frontend and backend modules!
-- Frontend communicates with Backend flawlessly and vice-versa!
-- Beautifully Timetable get's generated!
+Meanwhile here are the key-features of the project!
+
+### Contents
+- 🖥️ A neat User Interface
+- 🗳️ Accepts number of slots per day, information on teachers and classes
+- 💾 Data is stored locally to ensure refreshing the page does not clear the data
+- 🖱️ Cool nd Interactive buttons
+- ⚠️ Warns you when the information you entered is in incorrect format!
+- 📰 Visually appealing and conflict free Timetable
+- 🗏 Export as PDF!
+
+### Checklist for Timetable-generator
+- [x] Every subject assigned must be taught by the listed teacher.
+- [x] No teacher double-assigned in same period, across classes.
+- [x] Total periods per day align with your institution’s timing.
+- [x] No class exceeds the allowed periods, or leaves periods unassigned.
+- [x] All classes and teachers have valid subject/slot entries.
+
+
+### License
+MIT License
+
+### Contact
+email: hareekshith@gmail.com

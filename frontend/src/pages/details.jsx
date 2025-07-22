@@ -37,7 +37,10 @@ function useAutoClearLocalStorage(timeout = 180000) { // 3 minutes in ms
 
 function Details() {
   useAutoClearLocalStorage(180000);
-  const [noper, setNoper] = useState(0);
+  const [noper, setNoper] = useState(() => {
+    const saved = localStorage.getItem("noper");
+    return saved ? JSON.parse(saved) : 10;
+  });
   const [teacher, setTeacher] = useState({ name: "", subject: "" });
   const [teachli, setTeachli] = useState(() => {
     const saved = localStorage.getItem("teachli");
@@ -66,9 +69,18 @@ function Details() {
     localStorage.setItem("submitted", JSON.stringify(submitted));
   }, [submitted]);
 
+  useEffect(() => {
+    localStorage.setItem("noper", JSON.stringify(noper));
+  }, [noper])
+
   function handleAddSlot(e) {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload
+  if (!noper || isNaN(noper) || noper <= 0) {
+    alert("Please enter a valid number of periods per day.");
+    return;
   }
+  alert(`Slots per day set to ${noper}`);
+}
 
   function handleAddTeacher(e) {
     e.preventDefault();
@@ -98,7 +110,7 @@ function Details() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const allData = { teachers: teachli, classes: clali };
+    const allData = { teachers: teachli, classes: clali, noslot:noper };
     axios
       .post('http://localhost:5000/api/generate', { dic: allData })
       .then(response => {
@@ -134,12 +146,14 @@ function Details() {
     localStorage.removeItem("teachli");
     localStorage.removeItem("clali");
     localStorage.removeItem("submitted");
+    localStorage.removeItem("noper");
   }
 
   return (
     <div className="hero-bg">
+      <Link to="/" className="cta-btn" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt;Back</Link>
       <div className="home-card" style={{gridColumn: "1/span 2"}}>
-        <form>
+        <form onSubmit={handleAddSlot}>
           <label htmlFor="no-periods">Number of slots per day</label>
           <input
             type="text"

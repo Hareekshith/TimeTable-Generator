@@ -32,7 +32,7 @@ def generate_timetable():
         for j in l:
             if not verify(dic,j):
                 return jsonify({"error": "Kindly check with your data entered!"}), 400
-    tt = gen_schedule(dic)
+    tt = gen_schedule(dic, dic['noslot'])
     global r
     r = tt
     print(tt)

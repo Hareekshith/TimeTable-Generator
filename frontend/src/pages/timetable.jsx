@@ -11,7 +11,7 @@ function TimetableTable({ label, data, periodCount }) {
   return (
     <div className="time-card">
       <h3>{label}</h3>
-      <table>
+      <table style={{tableLayout: "fixed"}}>
         <thead>
           <tr>
             <th>Day</th>
@@ -80,45 +80,83 @@ export default function TimetablePage() {
     data.classes[Object.keys(data.classes)[0]][0]?.length || 10;
 
   const handleDownloadPDF = async () => {
-    const element = timetableRef.current;
+  const element = timetableRef.current;
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: null,
+    windowWidth: element.scrollWidth,
+  });
 
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      backgroundColor: null,
-    });
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF("p", "mm", "a4");
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
 
-    const imgData = canvas.toDataURL("image/png");
+  const imgWidth = pdfWidth;
+  const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  let heightLeft = imgHeight;
+  let position = 0;
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("timetable.pdf");
-  };
+  // First page
+  pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+  heightLeft -= pdfHeight;
+
+  // Add more pages if needed
+  while (heightLeft > 0) {
+    position -= pdfHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight;
+  }
+
+  pdf.save("timetable.pdf");
+};
   return (
     <div className="hero-bg" ref={timetableRef}>
-      <Link to="/" className="cta-btn" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt; Back</Link>
+      <Link to="/details" className="cta-btn" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt; Back</Link>
         <h2 style={{ textAlign: "center", gridColumn: "1/span 2" }}>Class Timetables</h2>
-        {Object.entries(data.classes).map(([className, table]) => (
-          <TimetableTable
-            key={className}
-            label={className}
-            data={table}
-            periodCount={periodCount}
-          />
-        ))}
-        <h2 style={{ textAlign: "center", marginTop: "2rem", gridColumn: "1/ span 2" }}>
-          Teacher Timetables
-        </h2>
-        {Object.entries(data.teachers).map(([teacherName, table]) => (
-          <TimetableTable
-            key={teacherName}
-            label={teacherName}
-            data={table}
-            periodCount={periodCount}
-          />
-        ))}
+        {Object.entries(data.classes).map(([className, table], index, array) => {
+          const isOdd = array.length % 2 !== 0;
+          const isLast = index === array.length - 1;
+          const shouldCenter = isOdd && isLast;
+          return (
+            <div
+              key={className}
+              style={{
+                  gridColumn: shouldCenter ? "1/ -1 " : "auto",
+          }}>
+            <TimetableTable
+              label={className}
+              data={table}
+              periodCount={periodCount}
+                />
+            </div>
+          );
+        })}
+        <h2 style={{ textAlign: "center", marginTop: "2rem", gridColumn: "1 / span 2" }}>Teacher Timetables</h2>
+				{Object.entries(data.teachers).map(([teacherName, table], index, array) => {
+				  const isOdd = array.length % 2 !== 0;
+				  const isLast = index === array.length - 1;
+				  const shouldCenter = isOdd && isLast;
+				
+				  return (
+				    <div
+				      key={teacherName}
+				      style={{
+				        gridColumn: shouldCenter ? "1/ -1" : "auto",
+				      }}
+				    >
+				      <TimetableTable
+				        label={teacherName}
+				        data={table}
+				        periodCount={periodCount}
+				      />
+				    </div>
+				  );
+				})}
+
       <button onClick={handleDownloadPDF} style={{ marginBottom: "1rem" }}>Print PDF</button>
     </div>
   );
