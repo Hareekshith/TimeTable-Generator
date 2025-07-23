@@ -14,6 +14,7 @@ function useAutoClearLocalStorage(timeout = 180000) { // 3 minutes in ms
         localStorage.removeItem("teachli");
         localStorage.removeItem("clali");
         localStorage.removeItem("submitted");
+        localStorage.removeItem("noper")
         // Optionally reset state, show modal, or reload
         window.location.reload();
       }, timeout);
@@ -39,7 +40,7 @@ function Details() {
   useAutoClearLocalStorage(180000);
   const [noper, setNoper] = useState(() => {
     const saved = localStorage.getItem("noper");
-    return saved ? JSON.parse(saved) : 10;
+    return saved ? JSON.parse(saved) : "";
   });
   const [teacher, setTeacher] = useState({ name: "", subject: "" });
   const [teachli, setTeachli] = useState(() => {
@@ -112,7 +113,7 @@ function Details() {
     e.preventDefault();
     const allData = { teachers: teachli, classes: clali, noslot:noper };
     axios
-      .post('http://localhost:5000/api/generate', { dic: allData })
+      .post('https://stm-oi1a.onrender.com/api/generate', { dic: allData })
       .then(response => {
         if (response.status === 200) {
           setSubmitted(true);
@@ -143,6 +144,7 @@ function Details() {
     setTeacher({ name: "", subject: "" });
     setCla({ name: "", details: "" });
     setSubmitted(false);
+    setNoper("");
     localStorage.removeItem("teachli");
     localStorage.removeItem("clali");
     localStorage.removeItem("submitted");

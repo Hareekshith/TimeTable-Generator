@@ -50,7 +50,7 @@ export default function TimetablePage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/timetable")
+      .get("https://stm-oi1a.onrender.com/api/timetable")
       .then((res) => {
         setData(res.data);
         setLoading(false);

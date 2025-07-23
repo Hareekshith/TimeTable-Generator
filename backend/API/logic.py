@@ -57,6 +57,18 @@ def gen_schedule(data, per_day=10):
                         t_cnt[t][d] += 1
                         sc[s] -= 1
                         break
+        for d in range(5):
+            for p in range(per_day):
+                if tt[d][p] == "":
+            # Try to assign anything leftover
+                    for s in sorted(subs, key=lambda x: sc[x], reverse=True):
+                        if sc[s] > 0:
+                            t = sub_t[s]
+                            tt[d][p] = s
+                            t_tt[t][d][p] = cname
+                            t_cnt[t][d] += 1
+                            sc[s] -= 1
+                            break
 
         c_tt[cname] = tt
 

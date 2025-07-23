@@ -5,7 +5,7 @@ from flask_cors import CORS
 from API.logic import gen_schedule
 
 app = Flask(__name__)
-cors = CORS(app,origins="*")  # Enable CORS for all routes
+cors = CORS(app,origins=["https://stm-two.vercel.app/"])  # Enable CORS for all routes
 r = None
 def verify(d, s):
     if "(" not in s or ")" not in s:
