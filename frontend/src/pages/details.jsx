@@ -153,7 +153,7 @@ function Details() {
 
   return (
     <div className="hero-bg">
-      <Link to="/" className="cta-btn" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt;Back</Link>
+      <Link to="/" className="cta-btn" id="dd" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt;-</Link>
       <div className="home-card" style={{gridColumn: "1/span 2"}}>
         <form onSubmit={handleAddSlot}>
           <label htmlFor="no-periods">Number of slots per day</label>
@@ -165,6 +165,7 @@ function Details() {
               setNoper(parseInt(e.target.value || 0))
             }
           />
+            <button type="submit">Set</button>
         </form>
       </div>
       <div className="home-card">

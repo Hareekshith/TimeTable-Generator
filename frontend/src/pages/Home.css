@@ -35,6 +35,7 @@ body {
   text-align: center;
   position: relative;
   animation: fadeIn 0.8s;
+  margin-botton: 2rem;
 }
 
 #id{
@@ -209,7 +210,6 @@ button:hover{
 }
 .time-card {
   margin: 2rem auto;
-  width: 47vw;
   max-width: 47vw;
   background: var(--card-bg);
   padding: 1rem;
@@ -236,3 +236,46 @@ button:hover{
   background-color: var(--primary-bg);
 }
 
+@media(max-width: 956px){
+  html{
+    margin: 0;
+    padding: 0;
+  }
+  .hero-bg{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .home-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60vw;
+    margin-bottom: 1rem;
+  }
+  .features{
+    display: flex;
+    flex-direction: column;
+  }
+  h1, h2{
+    font-size: 1.6rem;
+  }
+  body{
+    font-size: .9rem;
+  }
+  .time-card{
+    font-size: 0.3rem;
+    max-width: 90vw;
+  }
+  #bb{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    height: 5px;
+    width: 5px;
+    border-radius: 700px;
+    margin-right: auto;
+  }
+}

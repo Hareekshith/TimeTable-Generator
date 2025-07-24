@@ -115,7 +115,7 @@ export default function TimetablePage() {
 };
   return (
     <div className="hero-bg" ref={timetableRef}>
-      <Link to="/details" className="cta-btn" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt; Back</Link>
+      <Link to="/details" className="cta-btn" id="dd" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt;-</Link>
         <h2 style={{ textAlign: "center", gridColumn: "1/span 2" }}>Class Timetables</h2>
         {Object.entries(data.classes).map(([className, table], index, array) => {
           const isOdd = array.length % 2 !== 0;
