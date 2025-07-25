@@ -72,7 +72,18 @@ function Details() {
 
   useEffect(() => {
     localStorage.setItem("noper", JSON.stringify(noper));
-  }, [noper])
+  }, [noper]);
+  useEffect(() => {
+    const lastActivity = parseInt(localStorage.getItem('lastActivity') || "0", 10);
+    const now = Date.now();
+    if (now - lastActivity > 180000) { // 3 minutes in ms
+      localStorage.removeItem('teachli');
+      localStorage.removeItem('clali');
+      localStorage.removeItem('submitted');
+    }
+  // Each activity event handler should also update 'lastActivity' as you do now
+  }, []);
+
 
   function handleAddSlot(e) {
     e.preventDefault(); // Prevent page reload
