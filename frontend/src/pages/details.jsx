@@ -80,6 +80,7 @@ function Details() {
       localStorage.removeItem('teachli');
       localStorage.removeItem('clali');
       localStorage.removeItem('submitted');
+      localStorage.removeItem('noper')
     }
   // Each activity event handler should also update 'lastActivity' as you do now
   }, []);

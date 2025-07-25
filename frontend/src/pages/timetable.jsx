@@ -64,14 +64,16 @@ export default function TimetablePage() {
 
   if (loading) {
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>Loading...</div>
+      <div className="hero-bg" style={{ display: "flex", textAlign: "center", alignItems: "center", justifyContent: "center" }}>Loading...</div>
     );
   }
 
   if (!data || !data.classes || !data.teachers) {
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        No timetable available.
+      <div className="hero-bg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", }}>
+        <div className="home-card"><h1>No timetable available.</h1>
+        <h2>Incase of building a new timetable, please land on the home screen!</h2>
+        <Link to='/' className="cta-btn" style={{marginTop: "4rem"}}>Home</Link></div>
       </div>
     );
   }
@@ -140,7 +142,6 @@ export default function TimetablePage() {
 				  const isOdd = array.length % 2 !== 0;
 				  const isLast = index === array.length - 1;
 				  const shouldCenter = isOdd && isLast;
-				
 				  return (
 				    <div
 				      key={teacherName}
