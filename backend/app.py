@@ -1,21 +1,29 @@
 # backend/app.py
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from API.logic import gen_schedule
+from datetime import timedelta
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "https://stm-two.vercel.app"}})
+app.secret_key = os.urandom(24)
 r = None
+app.permanent_session_lifetime=timedelta(minutes=3)
+
+@api.before_request
+def make_session_permanent():
+    session.permanent = True
+
 def verify(d, s):
-    if "(" not in s or ")" not in s:
+    if "(" not in s and ")" not in s:
         return 0
     rd = d['teachers']
     rs = s.split("(")
     subject = rs[0].strip()
     teacher = rs[1].rstrip(")").strip()
     for i in rd:
-        if i['name'] == teacher:
+        if i['name'].strip() == teacher:
             subjects = [subj.strip() for subj in i['subject'].split(",")]
             if subject in subjects:
                 return 1
@@ -33,17 +41,17 @@ def generate_timetable():
             if not verify(dic,j):
                 return jsonify({"error": "Kindly check with your data entered!"}), 400
     tt = gen_schedule(dic, dic['noslot'])
-    global r
-    r = tt
+    session['timetable'] = tt
     print(tt)
     return jsonify(tt), 200
 
 @app.route('/api/timetable', methods=['GET'])
 def get_timetable():
     # Serve the most recently generated timetable
-    if not r:
+    tt = session.get('timetable')
+    if not tt:
         return jsonify({"error": "No timetable generated yet."}), 404
-    return jsonify(r)
+    return jsonify(t)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
