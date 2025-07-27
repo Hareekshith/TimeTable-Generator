@@ -8,7 +8,9 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/details" element={<Details />} />
-      <Route path='/timetable' element={<TimetablePage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path='/timetable' element={<TimetablePage />} />
+      </Route>
     </Routes>
   );
 }

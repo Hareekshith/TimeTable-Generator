@@ -14,7 +14,8 @@ function useAutoClearLocalStorage(timeout = 180000) { // 3 minutes in ms
         localStorage.removeItem("teachli");
         localStorage.removeItem("clali");
         localStorage.removeItem("submitted");
-        localStorage.removeItem("noper")
+        localStorage.removeItem("noper");
+        sessionStorage.removeItem("canAccessTimetable");
         // Optionally reset state, show modal, or reload
         window.location.reload();
       }, timeout);
@@ -56,6 +57,9 @@ function Details() {
     const saved = localStorage.getItem("submitted");
     return saved ? JSON.parse(saved) : false;
   });
+  const handleAccessFlag = () => {
+    sessionStorage.setItem("canAccessTimetable", "true");
+  };
 
   // Save to localStorage on change
   useEffect(() => {
@@ -271,7 +275,7 @@ function Details() {
       <button onClick={handleReset}>Reset</button>
       <button id="submit" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0}>Submit</button>
       {submitted && (
-          <Link to="/timetable" className="cta-btn">View TimeTable</Link>
+          <Link to="/timetable" onClick={handleAccessFlag} className="cta-btn">View TimeTable</Link>
       )}
     </div>
   );
