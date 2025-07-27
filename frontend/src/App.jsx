@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import Details from "./pages/details"
 import TimetablePage from "./pages/timetable"
+import ProtectedRoute from "./comp/pr"
 
 function App() {
   return (
