@@ -129,7 +129,7 @@ function Details() {
     e.preventDefault();
     const allData = { teachers: teachli, classes: clali, noslot:noper };
     axios
-      .post('https://stm-oi1a.onrender.com/api/generate', { dic: allData })
+      .post('https://stm-oi1a.onrender.com/api/generate', { dic: allData }, {withCredentials: true})
       .then(response => {
         if (response.status === 200) {
           setSubmitted(true);
@@ -138,7 +138,7 @@ function Details() {
           setSubmitted(false);
           alert("Submission failed!");
         }
-      })
+      });
       .catch(error => {
         setSubmitted(false);
         if (

@@ -4,14 +4,14 @@ from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from API.logic import gen_schedule
 from datetime import timedelta
+import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "https://stm-two.vercel.app"}})
+CORS(app, resources={r"/api/*": {"origins": "https://stm-two.vercel.app"}}, supports_credentials=True)
 app.secret_key = os.urandom(24)
-r = None
 app.permanent_session_lifetime=timedelta(minutes=3)
 
-@api.before_request
+@app.before_request
 def make_session_permanent():
     session.permanent = True
 
@@ -42,7 +42,7 @@ def generate_timetable():
                 return jsonify({"error": "Kindly check with your data entered!"}), 400
     tt = gen_schedule(dic, dic['noslot'])
     session['timetable'] = tt
-    print(tt)
+    # print(tt)
     return jsonify(tt), 200
 
 @app.route('/api/timetable', methods=['GET'])
@@ -51,7 +51,7 @@ def get_timetable():
     tt = session.get('timetable')
     if not tt:
         return jsonify({"error": "No timetable generated yet."}), 404
-    return jsonify(t)
+    return jsonify(tt)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

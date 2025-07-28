@@ -50,7 +50,7 @@ export default function TimetablePage() {
 
   useEffect(() => {
     axios
-      .get("https://stm-oi1a.onrender.com/api/timetable")
+      .get("https://stm-oi1a.onrender.com/api/timetable", {withCredentials: true})
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -81,7 +81,8 @@ export default function TimetablePage() {
   const periodCount =
     data.classes[Object.keys(data.classes)[0]][0]?.length || 10;
 
-  const handleDownloadPDF = async () => {
+  const handleDownloadPDF = async () => {  
+  document.body.classList.add('print-style');
   const element = timetableRef.current;
   const canvas = await html2canvas(element, {
     scale: 2,
@@ -113,7 +114,8 @@ export default function TimetablePage() {
     heightLeft -= pdfHeight;
   }
 
-  pdf.save("timetable.pdf");
+  pdf.save("timetable.pdf");  
+  document.body.classList.remove('print-style');
 };
   return (
     <div className="hero-bg" ref={timetableRef}>
@@ -158,7 +160,7 @@ export default function TimetablePage() {
 				  );
 				})}
 
-      <button onClick={handleDownloadPDF} style={{ marginBottom: "1rem" }}>Print PDF</button>
+      <button onClick={() => window.print()} style={{ marginBottom: "1rem" }}>Print PDF</button>
     </div>
   );
 }

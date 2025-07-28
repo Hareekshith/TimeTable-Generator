@@ -19,6 +19,7 @@ Meanwhile here are the key-features of the project!
 - [x] Total periods per day align with your institution’s timing.
 - [x] No class exceeds the allowed periods, or leaves periods unassigned.
 - [x] All classes and teachers have valid subject/slot entries.
+- [x] Backend differentiates different devices, using sessions!
 
 
 ### License
