@@ -138,7 +138,7 @@ function Details() {
           setSubmitted(false);
           alert("Submission failed!");
         }
-      });
+      })
       .catch(error => {
         setSubmitted(false);
         if (
