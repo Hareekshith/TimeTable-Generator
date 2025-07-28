@@ -23,7 +23,7 @@ def verify(d, s):
     subject = rs[0].strip()
     teacher = rs[1].rstrip(")").strip()
     for i in rd:
-        if i['name'].strip() == teacher:
+        if i['name'].strip().lower() == teacher.lower():
             subjects = [subj.strip() for subj in i['subject'].split(",")]
             if subject in subjects:
                 return 1
