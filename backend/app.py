@@ -8,7 +8,7 @@ import os
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "https://stm-two.vercel.app"}}, supports_credentials=True)
-app.secret_key = os.urandom(24)
+app.secret_key = os.environ.get('SECRET_KEY', 'your-very-secret-key')
 app.permanent_session_lifetime=timedelta(minutes=3)
 
 @app.before_request
