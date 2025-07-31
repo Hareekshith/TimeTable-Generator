@@ -1,5 +1,4 @@
 # backend/app.py
-
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from API.logic import gen_schedule
