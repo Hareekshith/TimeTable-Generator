@@ -1,19 +1,39 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-// import { useAuthState } from "react-firebase-hooks/auth";
-// import { auth } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Login(){
-  const [un, setUn] = useState("Enter a username ");
-  const [psswd, setPsswd] = useState("Enter a password ");
+  const [isNew, setIsNew] = useState(false);
+  const [un, setUn] = useState("");
+  const [psswd, setPsswd] = useState("");
+  const [loggedIn, setLoggedIn] = useState("");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e) {
+	  e.preventDefault();
+	  setError("");
+	  try{
+	    await signInWithEmailAndPassword(auth, un, psswd);
+	    setLoggedIn(true);
+      navigate("/details");
+	  } catch(err){
+	    setError("Login Failed: "+err.message);
+      alert(err.message);
+	  }
+	}
   return (
-    <div className="hero-bg">
-      <div className="home-card">
-        <label htmlFor="Username">Enter the username </label>
-        <input type="text" name="Enter username " value={un} />
-        <label htmlFor="Password">Enter the password</label>
-        <input type="text" name="Enter password " value={psswd} />
-        <button onClick={handleSubmit}>Login</button>
+    <div className="hero-bg">     
+      <div className="home-card" style={{gridColumn: "1/-1", height: "30rem", width: "35rem", display: "flex", gap: "40px", flexDirection: "column"}}>
+    {isNew === true && <h1>Introduce yourself!</h1>}
+    {isNew === false && <h1>Let's see who you really are!</h1>}
+      <form onSubmit={handleSubmit} style={{gap: "50px", justifyContent: "center"}}>
+        <input type="email" name="username" value={un} placeholder="Enter email" onChange={e => setUn(e.target.value)} />
+        <input type="password" name="password" value={psswd} placeholder="Enter the password" onChange={e => setPsswd(e.target.value)}/>
+        <p>Are you new? <a onClick={e => setIsNew(true)}>Click Here</a> </p>
+        <button type="submit">Login</button>
+      </form>
       </div>
     </div>
   );
