@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
 export default function Login(){
@@ -10,13 +10,18 @@ export default function Login(){
   const [psswd, setPsswd] = useState("");
   const [loggedIn, setLoggedIn] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false)
 
   async function handleSubmit(e) {
 	  e.preventDefault();
 	  setError("");
 	  try{
-	    await signInWithEmailAndPassword(auth, un, psswd);
-	    setLoggedIn(true);
+      if (isNew) {
+        await createUserWithEmailAndPassword(auth, un, psswd);
+      } else {
+        await signInWithEmailAndPassword(auth, un, psswd);
+      }	
+      setLoggedIn(true);
       navigate("/details");
 	  } catch(err){
 	    setError("Login Failed: "+err.message);
