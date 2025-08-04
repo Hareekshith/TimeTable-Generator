@@ -1,93 +1,48 @@
 import React, { useState, useEffect,useRef } from "react";
 import { Link } from "react-router-dom";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth,db } from "../firebase";
 import "./Home.css";
 import axios from "axios";
 
-function useAutoClearLocalStorage(timeout = 180000) { // 3 minutes in ms
-  const timer = useRef();
-
-  useEffect(() => {
-    const resetTimer = () => {
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => {
-        // Clear only your app's keys for safety
-        localStorage.removeItem("teachli");
-        localStorage.removeItem("clali");
-        localStorage.removeItem("submitted");
-        localStorage.removeItem("noper");
-        sessionStorage.removeItem("canAccessTimetable");
-        // Optionally reset state, show modal, or reload
-        window.location.reload();
-      }, timeout);
-    };
-
-    // User actions to listen for:
-    const activityEvents = ["mousemove", "keydown", "click", "scroll"];
-    activityEvents.forEach(event =>
-      window.addEventListener(event, resetTimer)
-    );
-    resetTimer(); // Start timer on mount
-
-    return () => {
-      activityEvents.forEach(event =>
-        window.removeEventListener(event, resetTimer)
-      );
-      clearTimeout(timer.current);
-    };
-  }, [timeout]);
-}
-
 function Details() {
-  useAutoClearLocalStorage(180000);
-  const [noper, setNoper] = useState(() => {
-    const saved = localStorage.getItem("noper");
-    return saved ? JSON.parse(saved) : "";
-  });
+  const [noper, setNoper] = useState(0);
   const [teacher, setTeacher] = useState({ name: "", subject: "" });
-  const [teachli, setTeachli] = useState(() => {
-    const saved = localStorage.getItem("teachli");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [teachli, setTeachli] = useState([]);
   const [cla, setCla] = useState({ name: "", details: "" });
-  const [clali, setClali] = useState(() => {
-    const saved = localStorage.getItem("clali");
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [submitted, setSubmitted] = useState(() => {
-    const saved = localStorage.getItem("submitted");
-    return saved ? JSON.parse(saved) : false;
-  });
-  const handleAccessFlag = () => {
-    sessionStorage.setItem("canAccessTimetable", "true");
+  const [clali, setClali] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
+  const handleAccessFlag = useState(false);
+
+	useEffect(() => {
+	  const fetchUserData = async () => {
+	    const user = auth.currentUser;
+	    if (!user) return;
+	    const userDoc = doc(db, "users", user.uid);
+	    const docSnap = await getDoc(userDoc);
+	    if (docSnap.exists()) {
+	      const data = docSnap.data();
+	      if (data.noper) setNoper(data.noper);
+	      if (data.teachli) setTeachli(data.teachli);
+	      if (data.clali) setClali(data.clali);
+	      if (data.submitted !== undefined) setSubmitted(data.submitted);
+	    }
+	  };
+	  fetchUserData();
+	}, []);
+  useEffect(() => {
+  const saveUserData = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    await setDoc(doc(db, "users", user.uid), {
+      noper,
+      teachli,
+      clali,
+      submitted,
+    }, { merge: true });
   };
-
-  // Save to localStorage on change
-  useEffect(() => {
-    localStorage.setItem("teachli", JSON.stringify(teachli));
-  }, [teachli]);
-
-  useEffect(() => {
-    localStorage.setItem("clali", JSON.stringify(clali));
-  }, [clali]);
-
-  useEffect(() => {
-    localStorage.setItem("submitted", JSON.stringify(submitted));
-  }, [submitted]);
-
-  useEffect(() => {
-    localStorage.setItem("noper", JSON.stringify(noper));
-  }, [noper]);
-  useEffect(() => {
-    const lastActivity = parseInt(localStorage.getItem('lastActivity') || "0", 10);
-    const now = Date.now();
-    if (now - lastActivity > 180000) { // 3 minutes in ms
-      localStorage.removeItem('teachli');
-      localStorage.removeItem('clali');
-      localStorage.removeItem('submitted');
-      localStorage.removeItem('noper')
-    }
-  // Each activity event handler should also update 'lastActivity' as you do now
-  }, []);
+  saveUserData();
+}, [noper, teachli, clali, submitted]);
 
 
   function handleAddSlot(e) {
@@ -153,19 +108,26 @@ function Details() {
       });
   }
 
-  function handleReset() {
-    if (!window.confirm("Clear all data?")) return;
-    setTeachli([]);
-    setClali([]);
-    setTeacher({ name: "", subject: "" });
-    setCla({ name: "", details: "" });
-    setSubmitted(false);
-    setNoper("");
-    localStorage.removeItem("teachli");
-    localStorage.removeItem("clali");
-    localStorage.removeItem("submitted");
-    localStorage.removeItem("noper");
-  }
+	async function handleReset() {
+	  if (!window.confirm("Clear all data?")) return;
+	  // Clear React state
+	  setTeachli([]);
+	  setClali([]);
+	  setTeacher({ name: "", subject: "" });
+	  setCla({ name: "", details: "" });
+	  setSubmitted(false);
+	  setNoper("");
+	  // Reset Firestore user data to empty/default
+	  const user = auth.currentUser;
+	  if (user) {
+	    await setDoc(doc(db, "users", user.uid), {
+	      teachli: [],
+	      clali: [],
+	      submitted: false,
+	      noper: "",
+	    }, { merge: true }); // merge ensures only specified fields reset
+	  }
+	}
 
   return (
     <div className="hero-bg">
