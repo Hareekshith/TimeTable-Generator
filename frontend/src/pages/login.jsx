@@ -9,7 +9,6 @@ export default function Login(){
   const [psswd, setPsswd] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -20,17 +19,12 @@ export default function Login(){
       } else {
         await signInWithEmailAndPassword(auth, un, psswd);
       }
-      setLoggedIn(true);
-      navigate("/details");
     } catch(err){
       setError("Login Failed: "+err.message);
       alert(err.message);
     }
   }
 
-  if (loggedIn) {
-    return <Navigate to="/details" />;
-  }
 
   return (
     <div className="hero-bg">
