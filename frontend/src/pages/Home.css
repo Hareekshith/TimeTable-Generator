@@ -150,7 +150,6 @@ form input{
   border-width: 0;
   height: 30px;
   text-align: center;
-  width: 18rem;
 }
 
 form input:enabled{
