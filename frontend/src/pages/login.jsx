@@ -24,16 +24,25 @@ export default function Login(){
       alert(err.message);
     }
   }
-
-
   return (
     <div className="hero-bg">
-      <div className="home-card" style={{gridColumn: "1/-1", height: "30rem", width: "35rem", display: "flex", gap: "40px", flexDirection: "column"}}>
+      <div className="login">
         {isNew ? <h1>Introduce yourself!</h1> : <h1>Let's see who you really are!</h1>}
-        <form onSubmit={handleSubmit} style={{gap: "50px", justifyContent: "center", alignContent: 'center'}}>
+        <form onSubmit={handleSubmit} style={{gap: "50px", justifyContent: "center", alignItems: 'center', padding: "40px",}}>
           <input type="email" name="username" value={un} placeholder="Enter email" onChange={e => setUn(e.target.value)} required />
           <input type="password" name="password" value={psswd} placeholder="Enter the password" onChange={e => setPsswd(e.target.value)} required />
-          <p>Are you new? <button type="button" onClick={() => setIsNew(true)} style={{width: "10rem"}}>Click Here</button></p>
+          {isNew ? (
+            <>
+              <p>Have you already been here?</p>
+              <button type="button" onClick={() => setIsNew(false)} style={{ width: "10rem" }}>Click Here</button>
+            </>
+            ) : (
+            <>
+              <p>Are you new?</p>
+              <button type="button" onClick={() => setIsNew(true)} style={{ width: "10rem" }}>
+              Click Here</button>
+            </>
+          )}
           <button type="submit">{isNew ? "Register" : "Login"}</button>
         </form>
         {error && <p style={{color:"red"}}>{error}</p>}

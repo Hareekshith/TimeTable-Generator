@@ -150,6 +150,7 @@ form input{
   border-width: 0;
   height: 30px;
   text-align: center;
+  width: 18rem;
 }
 
 form input:enabled{
@@ -239,6 +240,24 @@ button:hover{
 .time-card th {
   background-color: var(--primary-bg);
 }
+.login{
+  grid-column: 1/span 2;
+  display: grid;
+  gap: 40px ;
+  grid-template-columns: 4fr 6fr;
+  place-items: center;
+  padding: 20px;
+  margin-top: 2rem;
+  background: var(--card-bg);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.32);
+  padding: 48px 40px 32px 40px;
+	width: 40vw;
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.8s;
+  margin-botton: 2rem;
+}
 
 @media(max-width: 956px){
   html{
@@ -251,7 +270,7 @@ button:hover{
     justify-content: center;
     align-items: center;
   }
-  .home-card{
+  .home-card,.login{
     display: flex;
     flex-direction: column;
     justify-content: center;
