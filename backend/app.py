@@ -6,8 +6,7 @@ from API.logic import gen_schedule
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
-app.secret_key = os.environ.get('SECRET_KEY', 'your-very-secret-key')
+CORS(app, resources={r"/api/*": {"origins": "localhost:5173"}}, support_credentials=True, allow_headers=["Content-Type","Authorization"])
 
 if not firebase_admin._apps:
     cred = credentials.Certificate("stmg1207.json")
@@ -15,14 +14,16 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 def get_firebase_uid(request):
-    auth_header = request.headers.get('Authorization', None)
+    auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
+        print("No or bad Authorization header")
         return None
     id_token = auth_header.split('Bearer ')[1]
     try:
-        decoded_token = firebase_auth.verify_id_token(id_token)
-        return decoded_token['uid']
-    except Exception:
+        decoded = firebase_auth.verify_id_token(id_token)
+        return decoded['uid']
+    except Exception as e:
+        print("Token verification failed:", e)  # Log the error!
         return None
 
 def verify(d, s):

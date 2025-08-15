@@ -79,35 +79,46 @@ function Details() {
     setClali(clali.filter((_, i) => i !== index));
     setSubmitted(false);
   }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const allData = { teachers: teachli, classes: clali, noslot:noper };
-    axios
-      .post('http://127.0.0.1:5000/api/generate', { dic: allData }, { withCredentials: true })
-      .then(response => {
-        if (response.status === 200) {
-          setSubmitted(true);
-          alert("Successfully submitted!");
-        } else {
-          setSubmitted(false);
-          alert("Submission failed!");
-        }
-      })
-      .catch(error => {
-        setSubmitted(false);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
-          alert("Error: " + error.response.data.error);
-        } else {
-          alert("Unknown Submission Error");
-        }
-      });
-  }
-
+	async function handleSubmit(e) {
+	  e.preventDefault();
+	  const allData = { teachers: teachli, classes: clali, noslot: noper };
+	  try {
+	    const user = auth.currentUser;
+	    if (!user) {
+	      alert("Not logged in");
+	      return;
+	    }
+	    const token = await user.getIdToken(/* forceRefresh= */ true);
+	    const response = await axios.post(
+	      'http://127.0.0.1:5000/api/generate',
+	      { dic: allData },
+	      {
+	        headers: {
+	          Authorization: `Bearer ${token}`,
+	        },
+	        // withCredentials: false, // Not needed for token-based auth
+	      }
+	    );
+	    if (response.status === 200) {
+	      setSubmitted(true);
+	      alert("Successfully submitted!");
+	    } else {
+	      setSubmitted(false);
+	      alert("Submission failed!");
+	    }
+	  } catch (error) {
+	    setSubmitted(false);
+	    if (
+	      error.response &&
+	      error.response.data &&
+	      error.response.data.error
+	    ) {
+	      alert("Error: " + error.response.data.error);
+	    } else {
+	      alert("Unknown Submission Error");
+	    }
+	  }
+	}
 	async function handleReset() {
 	  if (!window.confirm("Clear all data?")) return;
 	  // Clear React state
