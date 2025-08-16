@@ -6,7 +6,7 @@ from API.logic import gen_schedule
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "localhost:5173"}}, support_credentials=True, allow_headers=["Content-Type","Authorization"])
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True, allow_headers=["Content-Type","Authorization"],expose_headers="*")
 
 if not firebase_admin._apps:
     cred = credentials.Certificate("stmg1207.json")
@@ -40,12 +40,13 @@ def verify(d, s):
                 return 1
     return 0
 
-@app.route('/api/generate', methods=['POST'])
+@app.route('/api/generate', methods=['POST','OPTIONS'])
 def generate_timetable():
+    if request.method=='OPTIONS':
+        return ' ',200
     uid = get_firebase_uid(request)
     if not uid:
         return jsonify({"error": "Unauthorized"}), 401
-
     user_ref = db.collection('users').document(uid)
     user_doc = user_ref.get()
     if not user_doc.exists:
