@@ -90,7 +90,7 @@ function Details() {
 	    }
 	    const token = await user.getIdToken(/* forceRefresh= */ true);
 	    const response = await axios.post(
-	      'http://127.0.0.1:5000/api/generate',
+	      'http://localhost:5000/api/generate',
 	      { dic: allData },
 	      {
 	        headers: {
@@ -247,9 +247,7 @@ function Details() {
       </div>
       <button onClick={handleReset}>Reset</button>
       <button id="submit" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0}>Submit</button>
-      {submitted && (
-          <Link to="/timetable" onClick={handleAccessFlag} className="cta-btn">View TimeTable</Link>
-      )}
+      {submitted? <Link to="/timetable" className="cta-btn">View TimeTable</Link>: <></>}
     </div>
   );
 }

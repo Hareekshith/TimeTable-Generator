@@ -17,13 +17,13 @@ def can_place(tt, d, p, sub):
     return True
 
 def gen_schedule(data, per_day=10):
-    ts = [t['name'] for t in data['teachers']]
+    ts = [t['name'] for t in data['teachli']]
     t_tt = {t: [[None for _ in range(per_day)] for _ in range(5)] for t in ts}
     t_cnt = {t: [0]*5 for t in ts}
     c_tt = {}
     max_p = math.floor(0.8 * per_day)
 
-    for c in data['classes']:
+    for c in data['clali']:
         cname = c['name']
         det = c['details']
         sub_t = {}
