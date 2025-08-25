@@ -247,7 +247,7 @@ function Details() {
       </div>
       <button onClick={handleReset}>Reset</button>
       <button id="submit" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0}>Submit</button>
-      {submitted? <Link to="/timetable" className="cta-btn">View TimeTable</Link>: <></>}
+      <Link to="/timetable" className="cta-btn">View TimeTable</Link>
     </div>
   );
 }

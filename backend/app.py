@@ -3,6 +3,7 @@ from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth, firestore
 from API.logic import gen_schedule
+import json
 import os
 
 app = Flask(__name__)
@@ -80,8 +81,17 @@ def generate_timetable():
             if not verify(dic, j):
                 return jsonify({"error": "Kindly check with your data entered!"}), 400
     tt = gen_schedule(dic, dic.get('noper'))
+    print(tt)
     tt_clean = to_firestore_safe(tt)
-    user_ref.update({'timetable': tt_clean})
+    print(tt_clean)
+    # user_ref.update({'timetable': tt_clean})
+    print(json.dumps(tt_clean, indent=2))
+    try:
+        user_ref.update({'timetable': tt_clean})
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
     return jsonify(tt), 200
 
 @app.route('/api/timetable', methods=['GET'])
