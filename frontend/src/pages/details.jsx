@@ -107,7 +107,7 @@ function Details() {
     const allData = { teachers: teachli, classes: clali, noslot: noper, timetable: {} };
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/generate",
+        "http://localhost:5000/api/userdata",
         { dic: allData },
         {
           headers: {
