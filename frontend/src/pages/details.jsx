@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Home.css";
 
+const API_BASE = "http://localhost:5000"; // Your backend base URL
+
 function Details() {
   const [noper, setNoper] = useState(0);
   const [teacher, setTeacher] = useState({ name: "", subject: "" });
@@ -12,26 +14,23 @@ function Details() {
   const [clali, setClali] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-  // Helper to get auth token stored locally (adjust if you use cookies or other storage)
+  // Helper to get stored JWT auth token
   const getAuthToken = () => localStorage.getItem("authToken");
 
-  // Fetch user data (MongoDB stored) on mount
+  // Fetch user data on mount, method GET
   useEffect(() => {
     const fetchUserData = async () => {
       const token = getAuthToken();
       if (!token) return;
       try {
-        const response = await axios.get("/api/userdata", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get(`${API_BASE}/api/userdata`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (response.data) {
-          const data = response.data;
-          if (data.noper !== undefined) setNoper(data.noper);
-          if (data.teachli) setTeachli(data.teachli);
-          if (data.clali) setClali(data.clali);
-          if (data.submitted !== undefined) setSubmitted(data.submitted);
+          if (response.data.noper !== undefined) setNoper(response.data.noper);
+          if (response.data.teachli) setTeachli(response.data.teachli);
+          if (response.data.clali) setClali(response.data.clali);
+          if (response.data.submitted !== undefined) setSubmitted(response.data.submitted);
         }
       } catch (error) {
         console.error("Failed to fetch user data", error);
@@ -40,20 +39,16 @@ function Details() {
     fetchUserData();
   }, []);
 
-  // Save user data on relevant state change
+  // Save user data on noper, teachli, clali, submitted change with POST
   useEffect(() => {
     const saveUserData = async () => {
       const token = getAuthToken();
       if (!token) return;
       try {
         await axios.post(
-          "/api/userdata/save",
+          `${API_BASE}/api/userdata/save`,
           { noper, teachli, clali, submitted },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
       } catch (error) {
         console.error("Failed to save user data", error);
@@ -107,13 +102,9 @@ function Details() {
     const allData = { teachers: teachli, classes: clali, noslot: noper, timetable: {} };
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/userdata",
+        `${API_BASE}/api/generate`,
         { dic: allData },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status === 200) {
         setSubmitted(true);
@@ -139,18 +130,14 @@ function Details() {
     setTeacher({ name: "", subject: "" });
     setCla({ name: "", details: "" });
     setSubmitted(false);
-    setNoper("");
+    setNoper(0);
     const token = getAuthToken();
     if (!token) return;
     try {
       await axios.post(
-        "/api/userdata/reset",
+        `${API_BASE}/api/userdata/reset`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (error) {
       console.error("Failed to reset user data", error);
@@ -165,7 +152,7 @@ function Details() {
       <div className="home-card" style={{ gridColumn: "1/span 2" }}>
         <form onSubmit={handleAddSlot}>
           <label htmlFor="no-periods">Number of slots per day</label>
-          <input type="text" value={noper} placeholder="No. of slots " onChange={(e) => setNoper(parseInt(e.target.value || 0))} />
+          <input type="text" value={noper} placeholder="No. of slots " onChange={(e) => setNoper(parseInt(e.target.value) || 0)} />
           <button type="submit">Set</button>
         </form>
       </div>

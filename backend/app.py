@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
+from API.logic import gen_schedule
 import os
 
 app = Flask(__name__)
@@ -102,15 +103,18 @@ def generate_timetable():
     user = users_col.find_one({'_id': ObjectId(uid)})
     if not user:
         return jsonify({'error': 'User not found'}), 404
-    # Example: just dummy timetable logic
-    noper = user.get('noper', 0)
-    teachli = user.get('teachli', [])
-    clali = user.get('clali', [])
-    # Replace below with real timetable generation logic as needed
-    timetable = {
-        'classes': {cl['name']: [['-'] * noper for _ in range(noper)] for cl in clali},
-        'teachers': {t['name']: [['-'] * noper for _ in range(noper)] for t in teachli}
-    }
+
+    data = request.get_json()
+    dic = data.get('dic')
+    if not dic:
+        return jsonify({'error': 'Missing input data'}), 400
+
+    noper = dic.get('noslot', user.get('noper', 0))
+    teachli = dic.get('teachers', user.get('teachli', []))
+    clali = dic.get('classes', user.get('clali', []))
+
+    timetable = gen_schedule({'teachli': teachli, 'clali': clali}, per_day=noper)
+
     users_col.update_one(
         {'_id': ObjectId(uid)},
         {'$set': {'timetable': timetable}}
