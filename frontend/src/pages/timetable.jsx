@@ -7,7 +7,7 @@ import jsPDF from "jspdf";
 import "./Home.css";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-const API_BASE = "http://localhost:5000";
+const API_BASE = "https://stm-gq6j.onrender.com";
 
 function TimetableTable({ label, data, periodCount }) {
   return (
@@ -113,10 +113,8 @@ export default function TimetablePage() {
     const imgHeight = (canvas.height * pdfWidth) / canvas.width;
     let heightLeft = imgHeight;
     let position = 0;
-    // First page
     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
     heightLeft -= pdfHeight;
-    // Add more pages if needed
     while (heightLeft > 0) {
       position -= pdfHeight;
       pdf.addPage();

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Home.css";
 
-const API_BASE = "http://localhost:5000"; // Your backend base URL
+const API_BASE = "http://stm-gq6j.onrender.com"; // Your backend base URL
 
 function Details() {
   const [noper, setNoper] = useState(0);

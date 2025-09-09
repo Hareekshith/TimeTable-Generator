@@ -13,7 +13,7 @@ import os
 
 app = Flask(__name__)
 CORS(app)
-app.config['JWT_SECRET_KEY'] = 'your-very-secret-key'  # Change for production!
+app.config['JWT_SECRET_KEY'] = os.getenv('jwt')  # Change for production!
 jwt = JWTManager(app)
 
 # Setup MongoDB
@@ -51,7 +51,6 @@ def login():
     access_token = create_access_token(identity=str(user['_id']))
     return jsonify(access_token=access_token, username=user['username']), 200
 
-### DATA SECTION ###
 @app.route('/api/userdata', methods=['GET'])
 @jwt_required()
 def get_userdata():
@@ -59,7 +58,6 @@ def get_userdata():
     user = users_col.find_one({'_id': ObjectId(uid)}, {'password': 0})
     if not user:
         return jsonify({}), 404
-    # Convert ObjectId to string for frontend
     user['_id'] = str(user['_id'])
     return jsonify(user), 200
 
