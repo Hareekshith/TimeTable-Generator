@@ -1,14 +1,12 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase"; // adjust path as needed
 
 const ProtectedRoute = () => {
-  const [user, loading] = useAuthState(auth);
-
-  if (loading) return null; // Or show spinner
-  if (user) return <Outlet />;
-  return <Navigate to="/login" replace />;
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
