@@ -15,12 +15,12 @@ export default function Login() {
     try {
       if (isNew) {
         // Register new user
-        await axios.post('http://stm-gq6j.onrender.com/register', { username: un, password: psswd });
+        await axios.post('https://stm-gq6j.onrender.com/register', { username: un, password: psswd });
         alert("Registration successful! Please log in.");
         setIsNew(false);
       } else {
         // Login existing user
-        const response = await axios.post('http://stm-gq6j.onrender.com/login', { username: un, password: psswd });
+        const response = await axios.post('https://stm-gq6j.onrender.com/login', { username: un, password: psswd });
         if (response.data.access_token) {
           localStorage.setItem('authToken', response.data.access_token);
           navigate('/details');
