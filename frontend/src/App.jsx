@@ -1,10 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./Home";
-import Login from "./Login";
-import Register from "./Register";
-import Details from "./Details";
-import TimetablePage from "./TimetablePage";
-import ProtectedRoute from "./ProtectedRoute";
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Details from "./pages/details";
+import TimetablePage from "./pages/timetable";
+import ProtectedRoute from "./comp/pr";
 
 export default function AppRoutes() {
   return (
@@ -12,7 +11,6 @@ export default function AppRoutes() {
       <Route path="/" element={<Navigate to="/home" replace />} />
       
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home />} />
