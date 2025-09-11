@@ -11,7 +11,7 @@ function Home() {
           Effortlessly create balanced, conflict-free class timetables.<br />
           Fast, simple, and customizable for any school!
         </p>
-        <Link to="/details" className="cta-btn">
+        <Link to="/login" className="cta-btn">
           Get Started
         </Link>
         <div className="features">

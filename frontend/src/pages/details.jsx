@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Home.css";
 
-const API_BASE = "http://stm-gq6j.onrender.com"; // Your backend base URL
+const API_BASE = "https://stm-gq6j.onrender.com"; // Your backend base URL
 
 function Details() {
   const [noper, setNoper] = useState(0);
@@ -146,7 +146,7 @@ function Details() {
 
   return (
     <div className="hero-bg">
-      <Link to="/" className="cta-btn" id="dd" style={{ gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent" }}>
+      <Link to="/login" className="cta-btn" id="dd" style={{ gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent" }}>
         &lt;-
       </Link>
       <div className="home-card" style={{ gridColumn: "1/span 2" }}>
