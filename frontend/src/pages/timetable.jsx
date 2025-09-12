@@ -51,7 +51,7 @@ export default function TimetablePage() {
   const timetableRef = useRef(null);
 
   // Helper to get JWT token from localStorage
-  const getAuthToken = () => localStorage.getItem("authToken");
+  const getAuthToken = () => sessionStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchTimetable = async () => {

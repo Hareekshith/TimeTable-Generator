@@ -22,7 +22,7 @@ export default function Login() {
         // Login existing user
         const response = await axios.post('https://stm-gq6j.onrender.com/login', { username: un, password: psswd });
         if (response.data.access_token) {
-          localStorage.setItem('authToken', response.data.access_token);
+          sessionStorage.setItem("authToken", response.data.access_token);
           navigate('/details');
         } else {
           setError("Login failed: No token received");

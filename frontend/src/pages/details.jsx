@@ -15,7 +15,7 @@ function Details() {
   const [submitted, setSubmitted] = useState(false);
 
   // Helper to get stored JWT auth token
-  const getAuthToken = () => localStorage.getItem("authToken");
+  const getAuthToken = () => sessionStorage.getItem("authToken");
 
   // Fetch user data on mount, method GET
   useEffect(() => {
@@ -30,7 +30,6 @@ function Details() {
           if (response.data.noper !== undefined) setNoper(response.data.noper);
           if (response.data.teachli) setTeachli(response.data.teachli);
           if (response.data.clali) setClali(response.data.clali);
-          if (response.data.submitted !== undefined) setSubmitted(response.data.submitted);
         }
       } catch (error) {
         console.error("Failed to fetch user data", error);
@@ -47,7 +46,7 @@ function Details() {
       try {
         await axios.post(
           `${API_BASE}/api/userdata/save`,
-          { noper, teachli, clali, submitted },
+          { noper, teachli, clali},
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } catch (error) {
@@ -55,7 +54,7 @@ function Details() {
       }
     };
     saveUserData();
-  }, [noper, teachli, clali, submitted]);
+  }, [noper, teachli, clali]);
 
   function handleAddSlot(e) {
     e.preventDefault();
