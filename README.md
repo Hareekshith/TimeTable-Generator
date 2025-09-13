@@ -21,6 +21,9 @@ Meanwhile here are the key-features of the project!
 - [x] All classes and teachers have valid subject/slot entries.
 - [x] Backend differentiates different devices, using sessions!
 
+### Screenshots
+<img src="Screenshots/det.png" style="height: 200px;" alt="A photo of how the details of timetable is to be entered">
+<img src="Screenshots/tt.png" style="height: 100px;" alt="A photo of how timetable is displayed">
 
 ### License
 MIT License
