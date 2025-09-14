@@ -88,7 +88,26 @@ h2{
   transform: scale(1.1);
   color: #ccf;
 }
-
+.bck-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #fff;
+  border-radius: 6rem;
+  margin-bottom: 24px;
+  grid-column: 1/2; 
+  margin-top: 1rem; 
+  justify-self: left;
+  height: 3rem;
+  width: 3rem;
+  margin-left: 1rem; 
+  display: grid; 
+  place-items: center;
+  transition: cubic-bezier(.4,1,.2,1) 0.3s;
+}
+.bck-btn:hover {
+  transform: scale(1.1);
+  color: #ccf;
+}
 .features {
   display: flex;
   justify-content: space-around;

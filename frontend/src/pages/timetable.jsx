@@ -5,9 +5,10 @@ import axios from "axios";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import "./Home.css";
+import { IoArrowBack } from 'react-icons/io5';
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-const API_BASE = "https://stm-gq6j.onrender.com";
+const API_BASE = "http://localhost:5000";
 
 function TimetableTable({ label, data, periodCount }) {
   return (
@@ -68,6 +69,7 @@ export default function TimetablePage() {
           },
         });
         setData(res.data);
+        console.log(res.data);
       } catch (err) {
         console.error("Failed to fetch timetable:", err);
         alert("Unable to load timetable.");
@@ -96,38 +98,11 @@ export default function TimetablePage() {
   const periodCount =
     data.classes[Object.keys(data.classes)[0]][0]?.length || 10;
 
-  const handleDownloadPDF = async () => {
-    document.body.classList.add('print-style');
-    const element = timetableRef.current;
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: null,
-      windowWidth: element.scrollWidth,
-    });
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pdfWidth;
-    const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-    let heightLeft = imgHeight;
-    let position = 0;
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pdfHeight;
-    while (heightLeft > 0) {
-      position -= pdfHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pdfHeight;
-    }
-    pdf.save("timetable.pdf");  
-    document.body.classList.remove('print-style');
-  };
-
   return (
     <div className="hero-bg" ref={timetableRef}>
-      <Link to="/details" className="cta-btn" id="dd" style={{gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent"}}>&lt;-</Link>
+      <Link to="/details" className="bck-btn" id="dd">        
+        <IoArrowBack style={{ marginRight: '8px' }}/>
+      </Link>
       <h2 style={{ textAlign: "center", gridColumn: "1/span 2" }}>Class Timetables</h2>
       {Object.entries(data.classes).map(([className, table], index, array) => {
         const isOdd = array.length % 2 !== 0;
@@ -167,7 +142,6 @@ export default function TimetablePage() {
           </div>
         );
       })}
-      <button onClick={handleDownloadPDF} style={{ marginBottom: "1rem" }}>Download PDF</button>
       <button onClick={() => window.print()} style={{ marginBottom: "1rem" }}>Print PDF</button>
     </div>
   );

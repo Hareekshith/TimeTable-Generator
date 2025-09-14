@@ -9,18 +9,20 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const API_base = "http://127.0.0.1:5000";
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     try {
       if (isNew) {
         // Register new user
-        await axios.post('https://stm-gq6j.onrender.com/register', { username: un, password: psswd });
+        await axios.post(`${API_base}/register`, { username: un, password: psswd });
         alert("Registration successful! Please log in.");
         setIsNew(false);
       } else {
         // Login existing user
-        const response = await axios.post('https://stm-gq6j.onrender.com/login', { username: un, password: psswd });
+        const response = await axios.post(`${API_base}/login`, { username: un, password: psswd });
         if (response.data.access_token) {
           sessionStorage.setItem("authToken", response.data.access_token);
           navigate('/details');

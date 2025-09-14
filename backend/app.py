@@ -12,7 +12,7 @@ from API.logic import gen_schedule
 import os
 
 app = Flask(__name__)
-CORS(app, origins="https://stm-psi.vercel.app/*", supports_credentials=True)
+CORS(app)#, origins="https://stm-psi.vercel.app/*", supports_credentials=True)
 app.config['JWT_SECRET_KEY'] = os.getenv('jwt')  
 jwt = JWTManager(app)
 

@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Home.css";
+import { IoArrowBack } from 'react-icons/io5';
 
-const API_BASE = "https://stm-gq6j.onrender.com"; // Your backend base URL
+const API_BASE = "http://localhost:5000"; // Your backend base URL
 
 function Details() {
   const [noper, setNoper] = useState(0);
@@ -108,6 +109,7 @@ function Details() {
       if (response.status === 200) {
         setSubmitted(true);
         alert("Successfully submitted!");
+          sessionStorage.setItem("authToken", response.data.access_token);
       } else {
         setSubmitted(false);
         alert("Submission failed!");
@@ -145,10 +147,10 @@ function Details() {
 
   return (
     <div className="hero-bg">
-      <Link to="/login" className="cta-btn" id="dd" style={{ gridColumn: "1/2", marginTop: "1rem", justifySelf: "left", marginLeft: "1rem", height: "maxContent" }}>
-        &lt;-
+      <Link to="/login" className="bck-btn" >
+        <IoArrowBack style={{ marginRight: '8px' }}/>
       </Link>
-      <div className="home-card" style={{ gridColumn: "1/span 2" }}>
+    <div className="home-card" style={{ gridColumn: "1/span 2" }}>
         <form onSubmit={handleAddSlot}>
           <label htmlFor="no-periods">Number of slots per day</label>
           <input type="text" value={noper} placeholder="No. of slots " onChange={(e) => setNoper(parseInt(e.target.value) || 0)} />
