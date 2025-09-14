@@ -12,8 +12,8 @@ export default function AppRoutes() {
       
       <Route path="/login" element={<Login />} />
       
-      <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home />} />
+      <Route element={<ProtectedRoute />}>
         <Route path="/details" element={<Details />} />
         <Route path="/timetable" element={<TimetablePage />} />
       </Route>
