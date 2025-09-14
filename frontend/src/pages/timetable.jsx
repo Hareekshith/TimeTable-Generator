@@ -8,7 +8,7 @@ import "./Home.css";
 import { IoArrowBack } from 'react-icons/io5';
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-const API_BASE = "http://localhost:5000";
+const API_BASE = "https://stm-gq6j.onrender.com";
 
 function TimetableTable({ label, data, periodCount }) {
   return (
