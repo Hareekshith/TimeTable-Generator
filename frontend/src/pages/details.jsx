@@ -214,9 +214,6 @@ function Details() {
       <button id="submit" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0}>
         Submit
       </button>
-      <Link to="/timetable" className="cta-btn">
-        View TimeTable
-      </Link>
     </div>
   );
 }
