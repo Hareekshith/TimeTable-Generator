@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const API_base = "https://stm-gq6j.onrender.com";
-
+// const API_base = "http://localhost:5000";
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -24,7 +24,7 @@ export default function Login() {
         // Login existing user
         const response = await axios.post(`${API_base}/login`, { username: un, password: psswd });
         if (response.data.access_token) {
-          sessionStorage.setItem("authToken", response.data.access_token);
+          localStorage.setItem("authToken", response.data.access_token);
           navigate('/details');
         } else {
           setError("Login failed: No token received");

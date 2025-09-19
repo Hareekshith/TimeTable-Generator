@@ -9,6 +9,7 @@ import { IoArrowBack } from 'react-icons/io5';
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const API_BASE = "https://stm-gq6j.onrender.com";
+// const API_BASE = "http://localhost:5000";
 
 function TimetableTable({ label, data, periodCount }) {
   return (
@@ -51,8 +52,7 @@ export default function TimetablePage() {
   const [loading, setLoading] = useState(true);
   const timetableRef = useRef(null);
 
-  // Helper to get JWT token from localStorage
-  const getAuthToken = () => sessionStorage.getItem("authToken");
+  const getAuthToken = () => localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchTimetable = async () => {
@@ -69,7 +69,6 @@ export default function TimetablePage() {
           },
         });
         setData(res.data);
-        console.log(res.data);
       } catch (err) {
         console.error("Failed to fetch timetable:", err);
         alert("Unable to load timetable.");
@@ -86,6 +85,7 @@ export default function TimetablePage() {
     );
   }
   if (!data || !data.classes || !data.teachers) {
+    console.log(data);
     return (
       <div className="hero-bg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <div className="home-card"><h1>No timetable available.</h1>

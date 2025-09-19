@@ -1,22 +1,22 @@
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Home.css";
 import { IoArrowBack } from 'react-icons/io5';
 
 const API_BASE = "https://stm-gq6j.onrender.com"; // Your backend base URL
-
+// const API_BASE = "http://localhost:5000";
 function Details() {
   const [noper, setNoper] = useState(0);
   const [teacher, setTeacher] = useState({ name: "", subject: "" });
   const [teachli, setTeachli] = useState([]);
   const [cla, setCla] = useState({ name: "", details: "" });
   const [clali, setClali] = useState([]);
-  const [submitted, setSubmitted] = useState(false);
 
+  const navigate = useNavigate();
   // Helper to get stored JWT auth token
-  const getAuthToken = () => sessionStorage.getItem("authToken");
+  const getAuthToken = () => localStorage.getItem("authToken");
 
   // Fetch user data on mount, method GET
   useEffect(() => {
@@ -71,7 +71,7 @@ function Details() {
     if (!teacher.name.trim() || !teacher.subject.trim()) return;
     setTeachli((prev) => [...prev, teacher]);
     setTeacher({ name: "", subject: "" });
-    setSubmitted(false);
+    
   }
 
   function handleAddClass(e) {
@@ -79,17 +79,17 @@ function Details() {
     if (!cla.name.trim() || !cla.details.trim()) return;
     setClali((prev) => [...prev, cla]);
     setCla({ name: "", details: "" });
-    setSubmitted(false);
+    
   }
 
   function handleDeleteTeacher(index) {
     setTeachli(teachli.filter((_, i) => i !== index));
-    setSubmitted(false);
+    
   }
 
   function handleDeleteClass(index) {
     setClali(clali.filter((_, i) => i !== index));
-    setSubmitted(false);
+    
   }
 
   async function handleSubmit(e) {
@@ -107,15 +107,12 @@ function Details() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status === 200) {
-        setSubmitted(true);
         alert("Successfully submitted!");
-          sessionStorage.setItem("authToken", response.data.access_token);
+          navigate('/timetable');
       } else {
-        setSubmitted(false);
         alert("Submission failed!");
       }
     } catch (error) {
-      setSubmitted(false);
       if (error.response?.data?.error) {
         alert("Error: " + error.response.data.error);
       } else {
@@ -130,7 +127,7 @@ function Details() {
     setClali([]);
     setTeacher({ name: "", subject: "" });
     setCla({ name: "", details: "" });
-    setSubmitted(false);
+    
     setNoper(0);
     const token = getAuthToken();
     if (!token) return;
