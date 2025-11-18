@@ -9,7 +9,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const API_base = "https://stm-gq6j.onrender.com";
+const API_base = "https://stm-gq6j.onrender.com";
 // const API_base = "http://localhost:5000";
   async function handleSubmit(e) {
     e.preventDefault();
