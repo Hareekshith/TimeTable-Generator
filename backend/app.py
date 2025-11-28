@@ -1,26 +1,39 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from bson.objectid import ObjectId
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from API.logic import gen_schedule
 import os
 
+# Load environment variables for local development (ignored on Render)
+# load_dotenv()
+
 app = Flask(__name__)
-CORS(app,origins="https://stm-psi.vercel.app", supports_credentials=True)
+CORS(app, origins="https://stm-psi.vercel.app", supports_credentials=True)
 app.config['JWT_SECRET_KEY'] = os.getenv('jwt')  
 jwt = JWTManager(app)
 
-# Setup MongoDB
-client = MongoClient(
-        os.getenv('mu'),
-        tls=True,
-        tlsAllowInvalidCertificates=False,
-        serverSelectionTimeoutMS=3000)
+# MongoDB Atlas connection setup
+# Ensure 'mu' is set in Render dashboard as the full mongodb+srv:// URI
+uri = os.getenv('mu')
+if not uri:
+    raise ValueError("MongoDB URI not set in environment variables")
+
+client = MongoClient(uri, server_api=ServerApi('1'))
+
+# Ping to confirm connection (optional, for debugging)
+try:
+    client.admin.command('ping')
+    print("Connected to MongoDB Atlas")
+except Exception as e:
+    print("MongoDB connection error:", e)
+
 db = client['userinfo']
 users_col = db['ttstorage']
 
