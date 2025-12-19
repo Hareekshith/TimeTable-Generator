@@ -1,5 +1,5 @@
 # TimeTable Generator
-![screenshots](https://github.com/hareekshith/Timetable-generator/blob/main/poster_final.png) <br>
+![screenshots](https://github.com/hareekshith/Timetable-generator/blob/main/poster_final.webp) <br>
 This is a curious idea to generate the timetable for an educational institution.
 This will generate timetable based on the number of faculty members, their subjects allotted, and the number of classes available. 
 Meanwhile here are the key-features of the project!
