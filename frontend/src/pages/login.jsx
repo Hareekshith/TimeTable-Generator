@@ -9,8 +9,9 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-const API_base = "https://stm-gq6j.onrender.com";
-// const API_base = "http://localhost:5000";
+  const API_base = "https://stm-gq6j.onrender.com";
+  // const API_base = "http://localhost:5000";
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -38,8 +39,12 @@ const API_base = "https://stm-gq6j.onrender.com";
   return (
     <div className="hero-bg">
       <div className="login">
-        {isNew ? <h1>Introduce yourself!</h1> : <h1>Let's see who you really are!</h1>}
+        {isNew ? <h1>Create Account</h1> : <h1>Welcome Back</h1>}
+        <p className="subtitle">
+          {isNew ? "Enter your details to register" : "Please login to continue"}
+        </p>
         <form onSubmit={handleSubmit}>
+          <label>Email Address</label>
           <input
             type="email"
             name="username"
@@ -48,32 +53,34 @@ const API_base = "https://stm-gq6j.onrender.com";
             onChange={e => setUn(e.target.value)}
             required
           />
+          <label>Password</label>
           <input
             type="password"
             name="password"
             value={psswd}
-            placeholder="Enter the password"
+            placeholder="Enter password"
             onChange={e => setPsswd(e.target.value)}
             required
           />
-          {isNew ? (
-            <>
-              <p>Have you already been here?</p>
-              <button type="button" onClick={() => setIsNew(false)} style={{ width: "10rem" }}>
-                Click Here
-              </button>
-            </>
-          ) : (
-            <>
-              <p>Are you new?</p>
-              <button type="button" onClick={() => setIsNew(true)} style={{ width: "10rem" }}>
-                Click Here
-              </button>
-            </>
-          )}
-          <button type="submit">{isNew ? "Register" : "Login"}</button>
+          
+          <button type="submit" style={{ marginTop: "1rem" }}>
+            {isNew ? "Register" : "Login"}
+          </button>
         </form>
-        {error && <p style={{ color: "red", gridColumn: "1/-1" }}>{error}</p>}
+
+        {isNew ? (
+          <div className="toggle-auth">
+            <span>Already have an account?</span>
+            <button type="button" onClick={() => setIsNew(false)}>Login</button>
+          </div>
+        ) : (
+          <div className="toggle-auth">
+            <span>New here?</span>
+            <button type="button" onClick={() => setIsNew(true)}>Register</button>
+          </div>
+        )}
+
+        {error && <p style={{ color: "var(--danger)", marginTop: "1rem", fontWeight: "500" }}>{error}</p>}
       </div>
     </div>
   );

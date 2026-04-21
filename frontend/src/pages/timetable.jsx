@@ -1,9 +1,6 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import "./Home.css";
 import { IoArrowBack } from 'react-icons/io5';
 
@@ -18,22 +15,25 @@ function TimetableTable({ label, data, periodCount }) {
       <table style={{tableLayout: "fixed"}}>
         <thead>
           <tr>
-            <th>Day</th>
+            <th style={{ width: "100px" }}>Day</th>
             {[...Array(periodCount)].map((_, i) => (
-              <th key={i}>P{i + 1}</th>
+              <th key={i}>Period {i + 1}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {data.map((day, dIndex) => (
             <tr key={dIndex}>
-              <td>{days[dIndex]}</td>
+              <td style={{ fontWeight: 600, color: "var(--text-main)", background: "rgba(15, 23, 42, 0.4)" }}>
+                {days[dIndex]}
+              </td>
               {day.map((entry, pIndex) => (
                 <td
                   key={pIndex}
                   style={{
-                    background: entry ? "#232b41" : "#3c4047",
-                    color: entry ? "#ff9800" : "#aaa",
+                    background: entry ? "rgba(59, 130, 246, 0.1)" : "transparent",
+                    color: entry ? "var(--accent2)" : "var(--text-muted)",
+                    fontWeight: entry ? 500 : 400
                   }}
                 >
                   {entry || "-"}
@@ -81,16 +81,20 @@ export default function TimetablePage() {
 
   if (loading) {
     return (
-      <div className="hero-bg" style={{ display: "flex", textAlign: "center", alignItems: "center", justifyContent: "center" }}>Loading...</div>
+      <div className="hero-bg">
+        <h2 style={{color: "var(--text-muted)"}}>Loading Timetable...</h2>
+      </div>
     );
   }
   if (!data || !data.classes || !data.teachers) {
     console.log(data);
     return (
-      <div className="hero-bg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <div className="home-card"><h1>No timetable available.</h1>
-        <h2>Incase of building a new timetable, please land on the home screen!</h2>
-        <Link to='/' className="cta-btn" style={{marginTop: "4rem"}}>Home</Link></div>
+      <div className="hero-bg">
+        <div className="home-card">
+          <h1>No timetable available.</h1>
+          <p className="subtitle">It looks like you haven't generated a timetable yet.</p>
+          <Link to='/' className="cta-btn" style={{marginTop: "2rem"}}>Go Home</Link>
+        </div>
       </div>
     );
   }
@@ -99,50 +103,37 @@ export default function TimetablePage() {
     data.classes[Object.keys(data.classes)[0]][0]?.length || 10;
 
   return (
-    <div className="hero-bg" ref={timetableRef}>
-      <Link to="/details" className="bck-btn" id="dd">        
-        <IoArrowBack style={{ marginRight: '8px' }}/>
+    <div className="hero-bg timetable-wrapper" ref={timetableRef} style={{ display: 'block', padding: '4rem 2rem' }}>
+      <Link to="/details" className="bck-btn" title="Back to Details">        
+        <IoArrowBack size={24} />
       </Link>
-      <h2 style={{ textAlign: "center", gridColumn: "1/span 2" }}>Class Timetables</h2>
-      {Object.entries(data.classes).map(([className, table], index, array) => {
-        const isOdd = array.length % 2 !== 0;
-        const isLast = index === array.length - 1;
-        const shouldCenter = isOdd && isLast;
-        return (
-          <div
+      
+      <div className="timetable-container">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem", flexWrap: "wrap", gap: "1rem" }}>
+          <h1 style={{ margin: 0, fontSize: "2.5rem" }}>Your Timetables</h1>
+          <button onClick={() => window.print()} className="cta-btn" style={{ margin: 0 }}>Print PDF</button>
+        </div>
+
+        <h2 style={{ color: "var(--text-muted)", marginBottom: "1.5rem", borderBottom: "1px solid var(--card-border)", paddingBottom: "0.5rem" }}>Class Schedules</h2>
+        {Object.entries(data.classes).map(([className, table]) => (
+          <TimetableTable
             key={className}
-            style={{
-              gridColumn: shouldCenter ? "1/ -1 " : "auto",
-            }}>
-            <TimetableTable
-              label={className}
-              data={table}
-              periodCount={periodCount}
-            />
-          </div>
-        );
-      })}
-      <h2 style={{ textAlign: "center", marginTop: "2rem", gridColumn: "1 / span 2" }}>Teacher Timetables</h2>
-      {Object.entries(data.teachers).map(([teacherName, table], index, array) => {
-        const isOdd = array.length % 2 !== 0;
-        const isLast = index === array.length - 1;
-        const shouldCenter = isOdd && isLast;
-        return (
-          <div
+            label={className}
+            data={table}
+            periodCount={periodCount}
+          />
+        ))}
+
+        <h2 style={{ color: "var(--text-muted)", marginTop: "4rem", marginBottom: "1.5rem", borderBottom: "1px solid var(--card-border)", paddingBottom: "0.5rem" }}>Teacher Schedules</h2>
+        {Object.entries(data.teachers).map(([teacherName, table]) => (
+          <TimetableTable
             key={teacherName}
-            style={{
-              gridColumn: shouldCenter ? "1/ -1" : "auto",
-            }}
-          >
-            <TimetableTable
-              label={teacherName}
-              data={table}
-              periodCount={periodCount}
-            />
-          </div>
-        );
-      })}
-      <button onClick={() => window.print()} style={{ marginBottom: "1rem" }}>Print PDF</button>
+            label={teacherName}
+            data={table}
+            periodCount={periodCount}
+          />
+        ))}
+      </div>
     </div>
   );
 }

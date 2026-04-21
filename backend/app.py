@@ -7,12 +7,12 @@ from flask_jwt_extended import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from bson.objectid import ObjectId
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from API.logic import gen_schedule
 import os
 
 # Load environment variables for local development (ignored on Render)
-# load_dotenv()
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app, origins="https://stm-psi.vercel.app", supports_credentials=True)

@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Home.css";
-import { IoArrowBack } from 'react-icons/io5';
+import { IoArrowBack, IoTrashOutline } from 'react-icons/io5';
 
 const API_BASE = "https://stm-gq6j.onrender.com"; // Your backend base URL
 // const API_BASE = "http://localhost:5000";
@@ -143,77 +142,99 @@ function Details() {
   }
 
   return (
-    <div className="hero-bg">
-      <Link to="/login" className="bck-btn" >
-        <IoArrowBack style={{ marginRight: '8px' }}/>
+    <div className="hero-bg" style={{ display: 'block', padding: '4rem 2rem' }}>
+      <Link to="/login" className="bck-btn" title="Back">
+        <IoArrowBack size={24} />
       </Link>
-    <div className="home-card" style={{ gridColumn: "1/span 2" }}>
-        <form onSubmit={handleAddSlot}>
-          <label htmlFor="no-periods">Number of slots per day</label>
-          <input type="text" value={noper} placeholder="No. of slots " onChange={(e) => setNoper(parseInt(e.target.value) || 0)} />
-          <button type="submit">Set</button>
-        </form>
-      </div>
-      <div className="home-card">
-        <form onSubmit={handleAddTeacher}>
-          <h1>For Adding Teachers</h1>
-          <label htmlFor="teacher-name">Teacher name</label>
-          <input type="text" value={teacher.name} placeholder="Enter name" onChange={(e) => setTeacher({ ...teacher, name: e.target.value })} />
-          <label htmlFor="subjects">Enter subjects (separated by commas)</label>
-          <input type="text" value={teacher.subject} placeholder="Enter subjects" onChange={(e) => setTeacher({ ...teacher, subject: e.target.value })} />
-          <button type="submit">Add</button>
-        </form>
-        {teachli.length > 0 && (
-          <>
-            <h3>Teachers List</h3>
-            <ul>
-              {teachli.map((t, i) => (
-                <li key={i}>
-                  <div className="ent">
-                    <h4 className="enttitl">{t.name}</h4>
-                    <p className="entsubj">{t.subject}</p>
-                    <button type="button" onClick={() => handleDeleteTeacher(i)}>
-                      Delete
+      
+      <div className="details-container" style={{ margin: '0 auto' }}>
+        <h1>Timetable Details</h1>
+        <p className="subtitle">Configure your slots, teachers, and classes below.</p>
+
+        {/* Slots Section on top */}
+        <div className="details-section" style={{ marginBottom: "2rem" }}>
+          <h2>1. Daily Slots</h2>
+          <form onSubmit={handleAddSlot} style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <label htmlFor="no-periods">Number of slots per day</label>
+              <input 
+                type="number" 
+                value={noper || ""} 
+                placeholder="e.g. 8" 
+                onChange={(e) => setNoper(parseInt(e.target.value) || 0)} 
+                min="1"
+              />
+            </div>
+            <button type="submit" style={{height: "46px", padding: "0 2rem"}}>Set Slots</button>
+          </form>
+        </div>
+
+        <div className="details-grid">
+
+          {/* Teachers Section */}
+          <div className="details-section">
+            <h2>2. Add Teachers</h2>
+            <form onSubmit={handleAddTeacher}>
+              <label>Teacher Name</label>
+              <input type="text" value={teacher.name} placeholder="e.g. John Doe" onChange={(e) => setTeacher({ ...teacher, name: e.target.value })} />
+              <label>Subjects (comma separated)</label>
+              <input type="text" value={teacher.subject} placeholder="e.g. Math, Physics" onChange={(e) => setTeacher({ ...teacher, subject: e.target.value })} />
+              <button type="submit" style={{width: "100%", marginTop: "0.5rem"}}>Add Teacher</button>
+            </form>
+            
+            {teachli.length > 0 && (
+              <ul style={{marginTop: "1.5rem"}}>
+                {teachli.map((t, i) => (
+                  <li key={i} className="ent">
+                    <div className="ent-content">
+                      <p className="enttitl">{t.name}</p>
+                      <p className="entsubj">{t.subject}</p>
+                    </div>
+                    <button type="button" className="danger-btn" onClick={() => handleDeleteTeacher(i)} title="Delete">
+                      <IoTrashOutline size={18} />
                     </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-      <div className="home-card">
-        <form onSubmit={handleAddClass}>
-          <h1>For Adding Classes</h1>
-          <label htmlFor="class-name">Class name</label>
-          <input type="text" placeholder="Enter class name" value={cla.name} onChange={(e) => setCla({ ...cla, name: e.target.value })} />
-          <label htmlFor="sub-teach">Enter subject with teacher name eg. Subject(Teacher name)</label>
-          <input type="text" placeholder="Enter your choices" value={cla.details} onChange={(e) => setCla({ ...cla, details: e.target.value })} />
-          <button type="submit">Add</button>
-        </form>
-        {clali.length > 0 && (
-          <>
-            <h3>Classes List</h3>
-            <ul>
-              {clali.map((t, i) => (
-                <li key={i}>
-                  <div className="ent">
-                    <h4 className="enttitl">{t.name}</h4>
-                    <p className="entsubj">{t.details}</p>
-                    <button type="button" onClick={() => handleDeleteClass(i)}>
-                      Delete
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Classes Section */}
+          <div className="details-section">
+            <h2>3. Add Classes</h2>
+            <form onSubmit={handleAddClass}>
+              <label>Class Name</label>
+              <input type="text" placeholder="e.g. Grade 10 A" value={cla.name} onChange={(e) => setCla({ ...cla, name: e.target.value })} />
+              <label>Requirements</label>
+              <input type="text" placeholder="e.g. Math(John Doe)" value={cla.details} onChange={(e) => setCla({ ...cla, details: e.target.value })} />
+              <button type="submit" style={{width: "100%", marginTop: "0.5rem"}}>Add Class</button>
+            </form>
+
+            {clali.length > 0 && (
+              <ul style={{marginTop: "1.5rem"}}>
+                {clali.map((t, i) => (
+                  <li key={i} className="ent">
+                    <div className="ent-content">
+                      <p className="enttitl">{t.name}</p>
+                      <p className="entsubj">{t.details}</p>
+                    </div>
+                    <button type="button" className="danger-btn" onClick={() => handleDeleteClass(i)} title="Delete">
+                      <IoTrashOutline size={18} />
                     </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        <div className="details-actions">
+          <button type="button" className="danger-btn" onClick={handleReset} style={{height: "3rem", padding: "0 2rem"}}>Reset All</button>
+          <button type="button" className="cta-btn" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0 || !noper} style={{margin: 0}}>
+            Generate Timetable
+          </button>
+        </div>
       </div>
-      <button onClick={handleReset}>Reset</button>
-      <button id="submit" onClick={handleSubmit} disabled={teachli.length === 0 || clali.length === 0}>
-        Submit
-      </button>
     </div>
   );
 }
